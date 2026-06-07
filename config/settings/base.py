@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
 
 # Optional: Celery Beat (only if installed)
 try:
-    import django_celery_beat  # noqa: F401
+    import django_celery_beat  # noqa: F401  # pyrefly: ignore
 
     THIRD_PARTY_APPS.append("django_celery_beat")
 except ImportError:

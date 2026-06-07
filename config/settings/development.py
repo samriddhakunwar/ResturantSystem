@@ -19,7 +19,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Django Debug Toolbar
 # ──────────────────────────────────────────────
 try:
-    import debug_toolbar  # noqa: F401
+    import debug_toolbar  # noqa: F401  # pyrefly: ignore
 
     INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")  # noqa: F405

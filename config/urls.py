@@ -30,7 +30,7 @@ if settings.DEBUG:
 
     # Django Debug Toolbar
     try:
-        import debug_toolbar  # noqa: F401
+        import debug_toolbar  # noqa: F401  # pyrefly: ignore
 
         urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
     except ImportError:
