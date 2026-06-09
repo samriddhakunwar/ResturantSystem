@@ -6,7 +6,7 @@ Provides automated nightly generation of daily sales reports.
 import datetime
 import logging
 
-from celery import shared_task
+from celery import shared_task  # pyrefly: ignore
 
 logger = logging.getLogger(__name__)
 
