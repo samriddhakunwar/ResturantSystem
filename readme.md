@@ -1,271 +1,230 @@
-# Build a Production-Ready Restaurant POS Backend (Django)
+# Restaurant POS Backend (Django)
 
-You are a senior backend engineer.
-
-Build a complete **restaurant POS backend system** using:
+A production-ready **Restaurant Point-of-Sale backend system** built with:
 
 * Django 5+
 * Django REST Framework
-* PostgreSQL
+* PostgreSQL (SQLite for local dev)
 * Docker + Docker Compose
-* Celery + Redis (for background jobs)
+* Celery + Redis (background jobs)
 * ESC/POS thermal printer support
-* Swagger/OpenAPI documentation
+* Swagger / OpenAPI documentation
 
-This is a **single-owner, private restaurant system** (no authentication system, no multi-user support).
+This is a **single-owner, private restaurant system** — no authentication, no multi-user support, no branches.
 
 ---
 
-# 🚨 SYSTEM CONTEXT
+## System Context
 
-* Only ONE restaurant owner uses the system
-* Runs on local network or single machine
-* No user accounts, no roles, no branches
-* Fully manual operations (menu, orders, inventory, payments)
+* Single restaurant owner uses the system
+* Runs on a local network or single machine
+* No user accounts, no roles
+* Fully manual operations (menu, orders, payments)
 * Cash and online payments are manually recorded
-* Thermal printer used for kitchen + billing
+* Thermal printer used for kitchen tickets and customer bills
 
 ---
 
-# 🧱 CORE MODULES
+## Core Modules
 
-## 1. MENU MANAGEMENT
+### 1. Menu Management
 
-* Category
-* MenuItem
+**Models:** `Category`, `MenuItem`
 
-Features:
-
-* Add / edit / delete menu items
-* Change price
-* Enable/disable item
-* Assign category
+* Add / edit / delete menu items and categories
+* Change price, enable/disable items
+* Assign items to categories
 
 ---
 
-## 2. ORDER MANAGEMENT
+### 2. Order Management
 
-* Order
-* OrderItem
+**Models:** `Order`, `OrderItem`
 
-Features:
-
-* Create order manually
-* Edit order
-* Delete order
-* Calculate total automatically
-* Track status:
-
-  * Pending
-  * Preparing
-  * Completed
-  * Cancelled
-
-When order is created:
-
-* Send to kitchen printer automatically
+* Create, edit, and cancel orders
+* Auto-calculate order totals
+* Track order status: `Pending → Preparing → Completed / Cancelled`
+* Automatically sends kitchen ticket to thermal printer on order creation
 
 ---
 
-## 3. BILLING SYSTEM
+### 3. Billing System
 
-* Bill
-* Payment
+**Models:** `Bill`, `Payment`
 
-Features:
-
-* Generate bill from order
-* Add tax, discount, service charge
-* Print bill via thermal printer
-* Mark payment manually:
-
+* Generate a bill from a completed order
+* Apply tax (13% Nepal VAT default), discount, and service charge (10% default)
+* Print customer bill via thermal printer
+* Manually record payments:
   * Cash
   * eSewa
   * Khalti
   * Card
-  * Bank transfer
+  * Bank Transfer
+* Auto-marks bill as paid once total payments ≥ grand total
 
 ---
 
-## 4. INVENTORY MANAGEMENT
+### 4. Reporting System
 
-* InventoryItem
-* StockMovement
-* InventoryExpense
+**Models:** `DailySalesReport`
 
-Features:
+* **Daily sales reports** — auto-generated via Celery Beat (nightly)
+* **Monthly summary** — aggregated view of daily reports per month
+* **Manual generation** via API or management command
 
-* Add stock manually
-* Update stock quantity
-* Track stock movements:
+Celery Beat schedules nightly report generation automatically.
 
-  * Purchase
-  * Usage
-  * Waste
-  * Adjustment
-
-### Inventory Expense Tracking (IMPORTANT)
-
-Each inventory cost must be recorded:
-
-* purchase cost
-* waste cost
-* adjustment cost
-
-Fields:
-
-* quantity
-* unit_cost
-* total_cost
-* expense_type
+**Management command:**
+```bash
+python manage.py generate_daily_report               # yesterday
+python manage.py generate_daily_report --date 2026-06-01
+python manage.py generate_daily_report --range 2026-06-01 2026-06-30
+```
 
 ---
 
-## 5. REPORTING SYSTEM
+### 5. Thermal Printer System (ESC/POS)
 
-### DAILY REPORTS (computed live)
+**Models:** `Printer`, `PrintJob`
 
-* Total orders today
-* Total revenue today (from bills)
-* Total expenses today (from inventory expenses)
-* Total profit today
+Supports:
+* USB printers
+* LAN (network) printers
 
-### MONTHLY REPORTS (stored in DB)
+Prints:
+* **Kitchen Ticket** — order number, items, quantities
+* **Customer Bill** — order breakdown, tax, discount, total, payment method
 
-Create a table:
-
-#### MonthlyReport
-
-* month (YYYY-MM)
-* total_orders
-* total_revenue
-* total_expenses
-* total_profit
-
-A scheduled job (Celery beat) must:
-
-* Generate monthly report automatically on 1st of each month
-* Save it permanently in DB
+Print jobs are processed asynchronously with automatic retry on failure.
 
 ---
 
-## 6. THERMAL PRINTER SYSTEM (ESC/POS)
+## Payment Flow
 
-Implement printing service for:
-
-### Kitchen Ticket
-
-* Order number
-* Items
-* Quantity
-* Status
-
-### Customer Bill
-
-* Order breakdown
-* Tax / discount
-* Total amount
-* Payment method
-
-Use ESC/POS compatible printer libraries.
-
-Support:
-
-* USB printer
-* LAN printer
+```
+Order Created
+  → Kitchen ticket printed automatically
+  → Bill generated from order
+  → Payments recorded manually
+  → Bill auto-marked paid when payments cover grand total
+  → Customer bill printed
+```
 
 ---
 
-## 7. DATABASE ENTITIES
+## Database Entities
 
 ### Core
-
-* Category
-* MenuItem
-* Order
-* OrderItem
-* Bill
-* Payment
-
-### Inventory
-
-* InventoryItem
-* StockMovement
-* InventoryExpense
+| Entity | App | Description |
+|---|---|---|
+| `Category` | menu | Menu item groupings |
+| `MenuItem` | menu | Individual dishes / products |
+| `Order` | orders | Customer orders |
+| `OrderItem` | orders | Line items within an order |
+| `Bill` | billing | Generated bill from an order |
+| `Payment` | billing | Payment records against a bill |
 
 ### Reporting
+| Entity | App | Description |
+|---|---|---|
+| `DailySalesReport` | reports | Pre-computed daily sales snapshot |
 
-* MonthlyReport
-
----
-
-## 8. BUSINESS LOGIC RULES
-
-* Order creates OrderItems
-* Order generates Bill
-* Bill generates Payment record
-* Inventory is NOT auto-deducted (manual only)
-* Expenses are manually recorded
-* Profit = Revenue - Expenses
+### Printers
+| Entity | App | Description |
+|---|---|---|
+| `Printer` | printers | Registered printer devices |
+| `PrintJob` | printers | Print job records with status and retries |
 
 ---
 
-## 9. REPORTING REQUIREMENTS
+## API Endpoints
 
-Implement APIs for:
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET/POST` | `/api/v1/menu/categories/` | List / create categories |
+| `GET/PUT/DELETE` | `/api/v1/menu/categories/{id}/` | Retrieve / update / delete category |
+| `GET/POST` | `/api/v1/menu/items/` | List / create menu items |
+| `GET/PUT/DELETE` | `/api/v1/menu/items/{id}/` | Retrieve / update / delete menu item |
+| `GET/POST` | `/api/v1/orders/orders/` | List / create orders |
+| `GET/PUT/DELETE` | `/api/v1/orders/orders/{id}/` | Retrieve / update / delete order |
+| `GET/POST` | `/api/v1/billing/bills/` | List / create bills |
+| `GET/PUT/DELETE` | `/api/v1/billing/bills/{id}/` | Retrieve / update / delete bill |
+| `PATCH` | `/api/v1/billing/bills/{id}/mark-paid/` | Manually mark bill as paid |
+| `GET/POST` | `/api/v1/billing/payments/` | List / create payments |
+| `GET/DELETE` | `/api/v1/billing/payments/{id}/` | Retrieve / delete payment |
+| `GET` | `/api/v1/reports/daily/` | List daily sales reports |
+| `GET` | `/api/v1/reports/daily/{id}/` | Single daily report |
+| `GET` | `/api/v1/reports/daily/monthly-summary/` | Aggregated monthly view |
+| `POST` | `/api/v1/reports/daily/generate/` | Manually trigger report generation |
+| `GET/POST` | `/api/v1/printers/printers/` | List / create printers |
+| `GET/POST` | `/api/v1/printers/jobs/` | List / create print jobs |
 
-### Daily
-
-* /reports/daily-sales
-* /reports/daily-orders
-* /reports/daily-expenses
-* /reports/daily-profit
-
-### Monthly
-
-* /reports/monthly
-* /reports/monthly/{month}
+**API Documentation:** `GET /api/docs/` (Swagger UI)
 
 ---
 
-## 10. PROJECT STRUCTURE
+## Project Structure
 
-Use modular Django apps:
-
+```
 apps/
+├── menu/        — Category, MenuItem
+├── orders/      — Order, OrderItem
+├── billing/     — Bill, Payment
+├── reports/     — DailySalesReport
+└── printers/    — Printer, PrintJob
 
-* menu/
-* orders/
-* billing/
-* inventory/
-* reports/
-* printers/
+config/
+├── settings/
+│   ├── base.py
+│   ├── development.py
+│   └── production.py
+├── urls.py
+├── celery.py
+├── asgi.py
+└── wsgi.py
 
----
-
-## 11. DELIVERABLES
-
-1. Full Django backend project
-2. PostgreSQL schema + migrations
-3. Docker setup
-4. Celery + Redis setup
-5. Swagger API documentation
-6. Printer integration service (ESC/POS)
-7. Seed data
-8. Clean modular architecture
-9. Production-ready code structure
-
----
-
-## 12. QUALITY REQUIREMENTS
-
-* Clean architecture
-* SOLID principles
-* RESTful API design
-* Optimized queries
-* Scalable structure
-* No unnecessary complexity (single-owner system)
+utils/
+├── models.py    — TimeStampedModel base
+└── pagination.py
+```
 
 ---
 
-Build this as a **real-world restaurant POS backend system**, not a demo.
+## Setup
+
+### Local development
+
+```bash
+pip install -r requirements/development.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+### Docker
+
+```bash
+docker-compose up --build
+```
+
+### Environment variables
+
+Copy `.env.example` to `.env` and set:
+
+```
+DJANGO_SECRET_KEY=your-secret-key
+DATABASE_URL=postgres://user:password@localhost:5432/restaurant_pos
+REDIS_URL=redis://localhost:6379/0
+```
+
+---
+
+## Quality Standards
+
+* Clean modular Django app architecture
+* RESTful API design with DRF
+* OpenAPI / Swagger documentation auto-generated
+* Optimised queryset usage (`select_related`, `prefetch_related`)
+* Background task processing via Celery
+* Idempotent daily report generation
+* Production-ready Docker + PostgreSQL setup

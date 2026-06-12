@@ -55,7 +55,6 @@ LOCAL_APPS = [
     "apps.menu",
     "apps.orders",
     "apps.billing",
-    "apps.inventory",
     "apps.reports",
     "apps.printers",
 ]
