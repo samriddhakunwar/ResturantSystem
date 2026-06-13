@@ -237,3 +237,23 @@ export const printersApi = {
     return http.post<ApiPrintJob>(`/printers/printers/${id}/test-print/`, {});
   },
 };
+
+// ── Expenses ────────────────────────────────────────────────────────────────
+export interface ExpenseMonthVM {
+  month: string;
+  ingredients: number;
+  labor: number;
+  utilities: number;
+  rent: number;
+  other: number;
+  total: number;
+}
+
+export const expensesApi = {
+  // 12-month, per-category breakdown for the dashboard chart.
+  byMonth(year: number): Promise<ExpenseMonthVM[]> {
+    return http.get<ExpenseMonthVM[]>(
+      `/expenses/expenses/monthly-breakdown/?year=${year}`,
+    );
+  },
+};

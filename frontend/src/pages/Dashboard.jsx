@@ -11,10 +11,11 @@ import { Link } from 'react-router-dom';
 import { usePOS } from '../context/PosContext';
 
 export default function Dashboard() {
-  const { apiOnline, orders, salesData } = usePOS();
+  const { apiOnline, orders, salesData, expensesData } = usePOS();
 
-  // Live sales series from the reports endpoint when available, else mock.
+  // Live sales/expenses series from the backend when available, else mock.
   const salesSeries = apiOnline && salesData ? salesData : salesChartData;
+  const expensesSeries = apiOnline && expensesData ? expensesData : expensesChartData;
 
   // Top-selling items aggregated from live order line items (else mock).
   const topSelling = (() => {
@@ -84,7 +85,7 @@ export default function Dashboard() {
           title="Expenses Overview"
           subtitle="Monthly cost breakdown"
         >
-          <ExpensesChart data={expensesChartData} />
+          <ExpensesChart data={expensesSeries} />
         </ChartCard>
       </div>
 

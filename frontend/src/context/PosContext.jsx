@@ -15,6 +15,7 @@ import {
   billingApi,
   printersApi,
   reportsApi,
+  expensesApi,
 } from '../api';
 
 const PosContext = createContext(null);
@@ -39,6 +40,7 @@ export function PosProvider({ children }) {
   // ── Printers & live analytics ───────────────────────────────────────────────
   const [printers, setPrinters] = useState([]);
   const [salesData, setSalesData] = useState(null); // live sales-by-month, else null
+  const [expensesData, setExpensesData] = useState(null); // live expenses-by-month, else null
 
   // ── Initial load from backend (with mock fallback) ──────────────────────────
   useEffect(() => {
@@ -55,9 +57,10 @@ export function PosProvider({ children }) {
         const invoices = await billingApi.list(orderList).catch(() => []);
         // Non-critical extras — never let them break the core load.
         const year = new Date().getFullYear();
-        const [printerList, sales] = await Promise.all([
+        const [printerList, sales, expenses] = await Promise.all([
           printersApi.list().catch(() => []),
           reportsApi.salesByMonth(year).catch(() => []),
+          expensesApi.byMonth(year).catch(() => []),
         ]);
         if (cancelled) return;
         setMenuItems(menu);
@@ -66,6 +69,8 @@ export function PosProvider({ children }) {
         setBills(invoices);
         setPrinters(printerList);
         setSalesData(sales.length ? sales : null);
+        // Only treat expenses as "live" if at least one month has spend recorded.
+        setExpensesData(expenses.some((m) => m.total > 0) ? expenses : null);
         setApiOnline(true);
       } catch (err) {
         // Backend down / CORS / not migrated → stay on mock data.
@@ -455,6 +460,7 @@ export function PosProvider({ children }) {
     orders,
     bills,
     salesData,
+    expensesData,
     printers,
     printersAvailable,
     printKitchenTicket,
