@@ -10,7 +10,16 @@ A production-ready **Restaurant Point-of-Sale backend system** built with:
 * ESC/POS thermal printer support
 * Swagger / OpenAPI documentation
 
-This is a **single-owner, private restaurant system** — no authentication, no multi-user support, no branches.
+This is a **single-owner café system**: one set of staff accounts, no roles, no branches.
+
+### Authentication
+
+Guests reach the server from their phones over the café Wi-Fi (via table QR codes), so **every staff endpoint requires a login**.
+
+* Staff accounts are created with `python manage.py createsuperuser` or in the Django admin. There is no role system.
+* `POST /api/v1/auth/login/` with `{"username", "password"}` returns `{"token", "user"}`. Send it as `Authorization: Token <token>`.
+* `POST /api/v1/auth/logout/` revokes the token; `GET /api/v1/auth/me/` returns the signed-in user.
+* Only `/api/v1/public/*` (the guest QR menu, cats and bookings) is open, and it is rate-limited per IP.
 
 ---
 
@@ -18,7 +27,7 @@ This is a **single-owner, private restaurant system** — no authentication, no 
 
 * Single restaurant owner uses the system
 * Runs on a local network or single machine
-* No user accounts, no roles
+* Staff log in with a token; no roles
 * Fully manual operations (menu, orders, payments)
 * Cash and online payments are manually recorded
 * Thermal printer used for kitchen tickets and customer bills

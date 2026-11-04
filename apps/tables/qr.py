@@ -35,5 +35,6 @@ def render_png(data: str) -> bytes:
 
 def render_svg(data: str) -> bytes:
     image = _qr(data).make_image(image_factory=qrcode.image.svg.SvgPathFillImage)
-    # The factory paints black on white; recolour the modules to charcoal.
-    return image.to_string(encoding="unicode").replace("#000000", CHARCOAL).encode("utf-8")
+    # The factory leaves the module path unfilled (black); paint it charcoal.
+    svg = image.to_string(encoding="unicode").replace("<path ", f'<path fill="{CHARCOAL}" ', 1)
+    return svg.encode("utf-8")

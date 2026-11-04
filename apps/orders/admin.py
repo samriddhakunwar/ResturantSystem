@@ -22,12 +22,22 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "order_number",
         "status",
+        "source",
         "table_number",
         "total",
+        "confirmed_at",
         "created_at",
     ]
-    list_filter = ["status", "created_at"]
+    list_filter = ["status", "source", "created_at"]
     search_fields = ["order_number"]
-    readonly_fields = ["order_number", "subtotal", "total", "created_at", "updated_at"]
+    readonly_fields = [
+        "order_number",
+        "public_id",
+        "subtotal",
+        "total",
+        "confirmed_at",
+        "created_at",
+        "updated_at",
+    ]
     ordering = ["-created_at"]
     inlines = [OrderItemInline]

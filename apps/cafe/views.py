@@ -23,6 +23,8 @@ import datetime
 from django.conf import settings
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, serializers, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -62,6 +64,7 @@ def _active_table(qr_token) -> Table:
 class ConfigView(PublicMixin, APIView):
     """Café branding and settings the frontend needs before anything else."""
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request):
         return Response(
             {
@@ -100,12 +103,14 @@ class MenuView(PublicMixin, generics.ListAPIView):
 
 
 class TableView(PublicMixin, APIView):
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request, qr_token):
         table = _active_table(qr_token)
         return Response({"number": table.number, "label": table.display_label})
 
 
 class TableOrderCreateView(PublicMixin, APIView):
+    @extend_schema(request=GuestOrderCreateSerializer, responses={201: GuestOrderSerializer})
     def post(self, request, qr_token):
         table = _active_table(qr_token)
         serializer = GuestOrderCreateSerializer(data=request.data, context={"table": table})
@@ -117,6 +122,7 @@ class TableOrderCreateView(PublicMixin, APIView):
 class ServiceRequestCreateView(PublicMixin, APIView):
     """Repeated taps while a request of the same type is open return that request."""
 
+    @extend_schema(request=GuestServiceRequestSerializer, responses=GuestServiceRequestSerializer)
     def post(self, request, qr_token):
         table = _active_table(qr_token)
         serializer = GuestServiceRequestSerializer(data=request.data)
@@ -162,6 +168,7 @@ class CatDetailView(PublicMixin, generics.RetrieveAPIView):
 
 
 class AdoptionEnquiryCreateView(PublicMixin, APIView):
+    @extend_schema(request=PublicAdoptionEnquirySerializer, responses={201: PublicAdoptionEnquirySerializer})
     def post(self, request, slug):
         cat = get_object_or_404(Cat, slug=slug)
         if cat.adoption_status not in (Cat.AdoptionStatus.AVAILABLE, Cat.AdoptionStatus.RESERVED):
@@ -176,6 +183,10 @@ class AdoptionEnquiryCreateView(PublicMixin, APIView):
 
 
 class AvailableSlotsView(PublicMixin, APIView):
+    @extend_schema(
+        parameters=[OpenApiParameter("date", OpenApiTypes.DATE, required=True)],
+        responses=OpenApiTypes.OBJECT,
+    )
     def get(self, request):
         try:
             date = datetime.date.fromisoformat(request.query_params.get("date", ""))

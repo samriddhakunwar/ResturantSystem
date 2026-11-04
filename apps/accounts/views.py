@@ -10,6 +10,8 @@ Endpoints:
     POST /auth/logout/  — revoke the caller's token
     GET  /auth/me/      — the signed-in user
 """
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -38,6 +40,7 @@ class LoginView(APIView):
     throttle_scope = "login"
     serializer_class = AuthTokenSerializer
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     def post(self, request):
         serializer = AuthTokenSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
@@ -49,6 +52,7 @@ class LoginView(APIView):
 class LogoutView(APIView):
     """Delete the caller's token so it can't be reused."""
 
+    @extend_schema(request=None, responses={204: None})
     def post(self, request):
         Token.objects.filter(user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -57,5 +61,6 @@ class LogoutView(APIView):
 class MeView(APIView):
     """Return the signed-in user."""
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request):
         return Response(_user_payload(request.user))

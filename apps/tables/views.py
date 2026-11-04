@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -48,6 +50,7 @@ class TableViewSet(viewsets.ModelViewSet):
 class TableQRView(APIView):
     """Render a table's QR code. ``?download=1`` adds a download filename."""
 
+    @extend_schema(responses={(200, "image/png"): OpenApiTypes.BINARY, (200, "image/svg+xml"): OpenApiTypes.STR})
     def get(self, request, pk: int, fmt: str):
         table = get_object_or_404(Table, pk=pk)
         url = qr.table_url(table)
