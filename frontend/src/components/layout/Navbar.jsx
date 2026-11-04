@@ -1,64 +1,55 @@
 // ─── Top Navbar ───────────────────────────────────────────────────────────────
 import { useState, useEffect } from 'react';
-import { Menu, Bell, ChevronDown } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { usePOS } from '../../context/PosContext';
-import SearchBar from '../ui/SearchBar';
+import { useStaff } from '../../context/StaffContext';
+import { isApiConfigured } from '../../api/client';
 
 export default function Navbar() {
-  const { toggleSidebar } = usePOS();
+  const { toggleSidebar, online, loadError } = usePOS();
+  const { user, logout } = useStaff();
   const [now, setNow] = useState(new Date());
-  const [search, setSearch] = useState('');
-  console.log("small changes");
+
   // Update clock every minute
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  const dateStr = now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const name = user?.first_name || user?.username;
 
   return (
-    <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-3">
+    <header className="sticky top-0 z-20 border-b border-line bg-cream px-4 py-3 sm:px-6">
       <div className="flex items-center gap-3">
         {/* Hamburger (mobile/tablet) */}
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-xl hover:bg-gray-100 text-gray-500 lg:hidden transition-colors"
+          className="rounded-sm p-2 text-muted transition-colors hover:bg-cream-pressed lg:hidden"
           aria-label="Toggle sidebar"
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
 
-        {/* Search */}
-        <SearchBar
-          placeholder="Search orders, customers…"
-          value={search}
-          onChange={setSearch}
-          className="flex-1 max-w-sm"
-        />
+        {!isApiConfigured && (
+          <span className="rounded-full bg-ginger-soft px-3 py-1 text-xs font-bold text-ginger-ink">Demo data (no backend)</span>
+        )}
+        {isApiConfigured && loadError && !online && (
+          <span role="alert" className="rounded-full bg-danger-soft px-3 py-1 text-xs font-bold text-danger">{loadError}</span>
+        )}
 
-        <div className="flex items-center gap-2 ml-auto">
-          {/* Time & Date */}
-          <div className="hidden sm:flex flex-col items-end mr-1">
-            <span className="text-sm font-bold text-gray-800 leading-tight">{timeStr}</span>
-            <span className="text-xs text-gray-400">{dateStr}</span>
+        <div className="ml-auto flex items-center gap-4">
+          <div className="hidden flex-col items-end sm:flex">
+            <span className="text-sm font-bold leading-tight text-charcoal tabular-nums">{timeStr}</span>
+            <span className="text-xs text-muted">{dateStr}</span>
           </div>
-
-          {/* Notification bell */}
-          <button className="relative p-2 rounded-xl hover:bg-gray-100 text-gray-500 transition-colors">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-olive-strong rounded-full" />
-          </button>
-
-          {/* Admin avatar */}
-          <button className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl hover:bg-gray-100 transition-colors">
-            <div className="w-8 h-8 bg-olive-dark rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">
-              A
+          {isApiConfigured && (
+            <div className="flex items-center gap-3">
+              {name && <span className="hidden text-sm font-semibold text-charcoal sm:block">{name}</span>}
+              <button type="button" onClick={logout} className="wb-btn wb-btn--outline wb-btn--sm">Sign out</button>
             </div>
-            <span className="hidden sm:block text-sm font-semibold text-gray-800">Admin</span>
-            <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-          </button>
+          )}
         </div>
       </div>
     </header>

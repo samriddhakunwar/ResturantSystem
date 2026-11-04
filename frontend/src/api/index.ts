@@ -61,6 +61,9 @@ export const menuApi = {
     price: number;
     description?: string;
     is_available?: boolean;
+    dietary_tags?: string[];
+    is_featured?: boolean;
+    recommended_by?: number | null;
   }): Promise<MenuVM> {
     const created = await http.post<ApiMenuItem>('/menu/menu-items/', input);
     return toMenuVM(created);

@@ -11,7 +11,7 @@ export function formatRs(value) {
 }
 
 /** "3 items" / "1 item". */
-export const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+export const plural = (n, word, many = `${word}s`) => `${n} ${n === 1 ? word : many}`;
 
 /** A cat's age as the kit writes it: "2 yrs", "8 months", "1 yr 6 months". */
 export function catAge(years = 0, months = 0) {
@@ -33,3 +33,7 @@ export function estimateCharges(subtotal, serviceRate = 0.1, vatRate = 0.13) {
   const vat = round2((subtotal + service) * vatRate);
   return { service, vat, total: round2(subtotal + service + vat) };
 }
+
+/** Short axis label: "Rs. 850", "Rs. 1.2k", "Rs. 240k". */
+export const formatRsShort = (v) =>
+  v < 1000 ? `Rs. ${v}` : `Rs. ${(v / 1000).toFixed(v < 10000 ? 1 : 0).replace(/\.0$/, '')}k`;

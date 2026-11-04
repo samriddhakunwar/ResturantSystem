@@ -62,15 +62,15 @@ export default function Menu() {
       {/* ── Page Header ─────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Menu Management</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Manage items, prices and availability</p>
+          <h1 className="text-2xl font-bold text-charcoal">Menu Management</h1>
+          <p className="text-sm text-muted mt-0.5">Manage items, prices and availability</p>
         </div>
         <button
           onClick={() => setShowAddPanel((v) => !v)}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all border active:scale-95
             ${showAddPanel
-              ? 'bg-olive-strong text-white border-olive-strong shadow-sm'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-olive-strong hover:text-olive-dark'
+              ? 'bg-olive-strong text-cream border-olive-strong shadow-sm'
+              : 'bg-panel text-muted border-line hover:border-olive-strong hover:text-olive-dark'
             }`}
         >
           <Package size={15} />
@@ -81,17 +81,17 @@ export default function Menu() {
       {/* ── KPI Strip ───────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-3 gap-3 mb-5">
         {[
-          { label: 'Total Items',    value: totalItems,    icon: Package,   color: 'text-gray-900',   bg: 'bg-gray-100' },
-          { label: 'Active Items',   value: activeItems,   icon: Eye,       color: 'text-green-600',  bg: 'bg-green-50' },
+          { label: 'Total Items',    value: totalItems,    icon: Package,   color: 'text-charcoal',   bg: 'bg-cream-pressed' },
+          { label: 'Active Items',   value: activeItems,   icon: Eye,       color: 'text-olive-strong',  bg: 'bg-olive-soft' },
           { label: 'Inactive Items', value: inactiveItems, icon: EyeOff,    color: 'text-olive-strong', bg: 'bg-olive-soft' },
         ].map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-3 flex items-center gap-3">
+          <div key={label} className="bg-panel rounded-2xl border border-line shadow-sm px-4 py-3 flex items-center gap-3">
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${bg} shrink-0`}>
               <Icon className={`w-4.5 h-4.5 ${color}`} size={18} />
             </div>
             <div>
               <p className={`text-xl font-black ${color}`}>{value}</p>
-              <p className="text-xs text-gray-400 font-medium">{label}</p>
+              <p className="text-xs text-muted font-medium">{label}</p>
             </div>
           </div>
         ))}
@@ -104,22 +104,22 @@ export default function Menu() {
         <div className="min-w-0 space-y-4">
 
           {/* Toolbar */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-3 flex flex-col sm:flex-row gap-3">
+          <div className="bg-panel rounded-2xl border border-line shadow-sm px-4 py-3 flex flex-col sm:flex-row gap-3">
             {/* Search */}
             <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search items…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-9 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none
-                  focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
+                className="w-full pl-9 pr-9 py-2 text-sm bg-cream border border-line rounded-xl outline-none
+                  focus:border-olive-strong focus:bg-panel focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-muted"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-muted"
                 >
                   <X size={14} />
                 </button>
@@ -136,8 +136,8 @@ export default function Menu() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all border shrink-0
                       ${isActive
-                        ? 'bg-olive-strong text-white border-olive-strong'
-                        : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-olive-strong hover:text-olive-dark'
+                        ? 'bg-olive-strong text-cream border-olive-strong'
+                        : 'bg-cream text-muted border-line hover:border-olive-strong hover:text-olive-dark'
                       }`}
                   >
                     {cat}
@@ -147,13 +147,13 @@ export default function Menu() {
             </div>
 
             {/* Status filter */}
-            <div className="flex items-center bg-gray-100 rounded-xl p-1 gap-0.5 shrink-0">
+            <div className="flex items-center bg-cream-pressed rounded-xl p-1 gap-0.5 shrink-0">
               {FILTER_TABS.map(({ id, label }) => (
                 <button
                   key={id}
                   onClick={() => setActiveFilter(id)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all
-                    ${activeFilter === id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                    ${activeFilter === id ? 'bg-panel text-charcoal shadow-sm' : 'text-muted hover:text-charcoal'}`}
                 >
                   {label}
                 </button>
@@ -163,7 +163,7 @@ export default function Menu() {
 
           {/* Results count */}
           <div className="flex items-center justify-between px-1">
-            <p className="text-xs text-gray-500 font-medium">
+            <p className="text-xs text-muted font-medium">
               {totalFiltered === 0
                 ? 'No items found'
                 : `${totalFiltered} item${totalFiltered !== 1 ? 's' : ''}${searchQuery ? ` matching "${searchQuery}"` : ''}`
@@ -181,10 +181,10 @@ export default function Menu() {
 
           {/* Category cards */}
           {totalFiltered === 0 ? (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-16 text-center">
+            <div className="bg-panel rounded-2xl border border-line shadow-sm flex flex-col items-center justify-center py-16 text-center">
               <CatSilhouette pose="stretching" className="mb-4 h-16 w-auto" />
-              <p className="text-base font-bold text-gray-700 mb-1">No items found</p>
-              <p className="text-sm text-gray-400">Try a different search or filter</p>
+              <p className="text-base font-bold text-charcoal mb-1">No items found</p>
+              <p className="text-sm text-muted">Try a different search or filter</p>
             </div>
           ) : (
             <div className="space-y-4">

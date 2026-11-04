@@ -13,20 +13,20 @@ import {
 function Field({ label, value, onChange, type = 'text', suffix }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-gray-500 mb-1.5">{label}</label>
+      <label className="block text-xs font-semibold text-muted mb-1.5">{label}</label>
       <div className="relative">
         <input
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="
-            w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200
+            w-full px-3 py-2.5 text-sm bg-cream border border-line
             rounded-xl outline-none focus:ring-2 focus:ring-olive-soft
-            focus:border-olive-strong transition-all duration-200 text-gray-800
+            focus:border-olive-strong transition-all duration-200 text-charcoal
           "
         />
         {suffix && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted font-medium">
             {suffix}
           </span>
         )}
@@ -38,12 +38,12 @@ function Field({ label, value, onChange, type = 'text', suffix }) {
 // ── Settings section card ────────────────────────────────────────────────────
 function SettingsCard({ icon: Icon, title, children }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-gray-50/50">
+    <div className="bg-panel rounded-2xl border border-line shadow-sm overflow-hidden">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-line bg-cream">
         <div className="w-8 h-8 bg-olive-soft rounded-lg flex items-center justify-center">
           <Icon className="w-4 h-4 text-olive-strong" />
         </div>
-        <h3 className="text-sm font-bold text-gray-800">{title}</h3>
+        <h3 className="text-sm font-bold text-charcoal">{title}</h3>
       </div>
       <div className="px-5 py-4">{children}</div>
     </div>
@@ -127,7 +127,7 @@ export default function Settings() {
 
         {/* 2. Printer & Kitchen */}
         <SettingsCard icon={Printer} title="Printer & Kitchen">
-          <div className="space-y-1 divide-y divide-gray-100">
+          <div className="space-y-1 divide-y divide-line">
             <ToggleSwitch
               checked={printer.autoPrintKitchenTicket}
               onChange={(v) => setPrinter((s) => ({ ...s, autoPrintKitchenTicket: v }))}
@@ -171,11 +171,11 @@ export default function Settings() {
             />
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1.5">Shift</label>
+                <label className="block text-xs font-semibold text-muted mb-1.5">Shift</label>
                 <select
                   value={counter.shift}
                   onChange={(e) => setCounter((s) => ({ ...s, shift: e.target.value }))}
-                  className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-olive-soft focus:border-olive-strong transition-all text-gray-800"
+                  className="w-full px-3 py-2.5 text-sm bg-cream border border-line rounded-xl outline-none focus:ring-2 focus:ring-olive-soft focus:border-olive-strong transition-all text-charcoal"
                 >
                   {['Morning', 'Afternoon', 'Evening', 'Night'].map((s) => (
                     <option key={s}>{s}</option>
@@ -208,12 +208,12 @@ export default function Settings() {
         <SettingsCard icon={FileText} title="Receipt Footer">
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">Thank You Message</label>
+              <label className="block text-xs font-semibold text-muted mb-1.5">Thank You Message</label>
               <textarea
                 value={receipt.thankYouMessage}
                 onChange={(e) => setReceipt((s) => ({ ...s, thankYouMessage: e.target.value }))}
                 rows={3}
-                className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-olive-soft focus:border-olive-strong transition-all resize-none text-gray-800"
+                className="w-full px-3 py-2.5 text-sm bg-cream border border-line rounded-xl outline-none focus:ring-2 focus:ring-olive-soft focus:border-olive-strong transition-all resize-none text-charcoal"
               />
             </div>
             <Field
@@ -226,7 +226,7 @@ export default function Settings() {
               value={receipt.footerNote}
               onChange={(v) => setReceipt((s) => ({ ...s, footerNote: v }))}
             />
-            <div className="space-y-1 divide-y divide-gray-100">
+            <div className="space-y-1 divide-y divide-line">
               <ToggleSwitch
                 checked={receipt.showLogo}
                 onChange={(v) => setReceipt((s) => ({ ...s, showLogo: v }))}

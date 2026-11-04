@@ -1,8 +1,9 @@
 // ─── POS Context ──────────────────────────────────────────────────────────────
 // Central state + integration seam. When VITE_API_URL is configured and the
 // backend is reachable, all menu/order/billing data is loaded from and written
-// to the Django REST API (via src/api). If the backend is unreachable, the app
-// transparently falls back to the bundled mock data so the UI still works.
+// to the Django REST API (via src/api). The bundled mock data is only used when
+// VITE_API_URL is empty (demo mode); a configured-but-unreachable backend shows
+// an error instead of pretending with fake orders.
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { ordersData } from '../data/ordersData';
 import { defaultSettings } from '../data/settingsData';
@@ -27,14 +28,15 @@ export function PosProvider({ children }) {
   const online = isApiConfigured && apiOnline;
 
   // ── Core state ──────────────────────────────────────────────────────────────
-  const [orders, setOrders] = useState(ordersData);
-  const [bills, setBills] = useState(billingOrders);
+  const [loadError, setLoadError] = useState('');
+  const [orders, setOrders] = useState(isApiConfigured ? [] : ordersData);
+  const [bills, setBills] = useState(isApiConfigured ? [] : billingOrders);
   const [settings, setSettings] = useState(defaultSettings);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeOrder, setActiveOrder] = useState(null);
 
   // ── Menu state ────────────────────────────────────────────────────────────
-  const [menuItems, setMenuItems] = useState(initialMenuData);
+  const [menuItems, setMenuItems] = useState(isApiConfigured ? [] : initialMenuData);
   const [categories, setCategories] = useState([]); // [{id, name}] when online
 
   // ── Printers & live analytics ───────────────────────────────────────────────
@@ -73,9 +75,12 @@ export function PosProvider({ children }) {
         setExpensesData(expenses.some((m) => m.total > 0) ? expenses : null);
         setApiOnline(true);
       } catch (err) {
-        // Backend down / CORS / not migrated → stay on mock data.
-        console.warn('[POS] Backend unreachable, using mock data:', err?.message ?? err);
-        if (!cancelled) setApiOnline(false);
+        // Backend down / CORS / not migrated → say so (a 401 already went to login).
+        console.warn('[POS] Backend unreachable:', err?.message ?? err);
+        if (!cancelled) {
+          setApiOnline(false);
+          setLoadError('Can’t reach the café system. Changes won’t be saved.');
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -102,6 +107,9 @@ export function PosProvider({ children }) {
             price: Number(item.price),
             description: item.description ?? '',
             is_available: item.available ?? true,
+            dietary_tags: item.dietaryTags ?? [],
+            is_featured: item.isFeatured ?? false,
+            recommended_by: item.recommendedById ?? null,
           });
           setMenuItems((prev) => [...prev, created]);
           return;
@@ -175,6 +183,9 @@ export function PosProvider({ children }) {
           if (updates.description !== undefined) patch.description = updates.description;
           if (updates.available !== undefined) patch.is_available = updates.available;
           if (updates.category !== undefined) patch.category = resolveCategoryId(updates.category);
+          if (updates.dietaryTags !== undefined) patch.dietary_tags = updates.dietaryTags;
+          if (updates.isFeatured !== undefined) patch.is_featured = updates.isFeatured;
+          if (updates.recommendedById !== undefined) patch.recommended_by = updates.recommendedById;
           const updated = await menuApi.update(id, patch);
           setMenuItems((prev) => prev.map((m) => (m.id === id ? updated : m)));
           return;
@@ -454,8 +465,10 @@ export function PosProvider({ children }) {
 
   const value = {
     // Connectivity
+    online,
     apiOnline: online,
     loading,
+    loadError,
     // Core
     orders,
     bills,

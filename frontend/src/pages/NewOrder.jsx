@@ -59,27 +59,27 @@ export default function NewOrder() {
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
 
         {/* Top Bar */}
-        <div className="bg-white border-b border-gray-100 px-5 py-3.5 flex items-center gap-3 shrink-0">
+        <div className="bg-panel border-b border-line px-5 py-3.5 flex items-center gap-3 shrink-0">
           <div>
-            <h1 className="text-base font-bold text-gray-900 leading-tight">New Order</h1>
-            <p className="text-xs text-gray-400">Build & manage order for customer</p>
+            <h1 className="text-base font-bold text-charcoal leading-tight">New Order</h1>
+            <p className="text-xs text-muted">Build & manage order for customer</p>
           </div>
 
           {/* Search */}
           <div className="flex-1 max-w-xs mx-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search for items…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-9 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
+                className="w-full pl-9 pr-9 py-2 text-sm bg-cream border border-line rounded-xl outline-none focus:border-olive-strong focus:bg-panel focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-muted"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-muted"
                 >
                   <X size={14} />
                 </button>
@@ -90,12 +90,12 @@ export default function NewOrder() {
           {/* Mobile cart toggle */}
           <button
             onClick={() => setCartDrawerOpen(true)}
-            className="relative xl:hidden ml-auto flex items-center gap-2 px-3 py-2 bg-olive-strong text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-olive-dark transition-colors active:scale-95"
+            className="relative xl:hidden ml-auto flex items-center gap-2 px-3 py-2 bg-olive-strong text-cream text-sm font-semibold rounded-xl shadow-sm hover:bg-olive-dark transition-colors active:scale-95"
           >
             <ShoppingCart size={16} />
             Cart
             {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white text-olive-strong border-2 border-olive-strong rounded-full text-[10px] font-black flex items-center justify-center">
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-panel text-olive-strong border-2 border-olive-strong rounded-full text-[10px] font-black flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -103,43 +103,43 @@ export default function NewOrder() {
         </div>
 
         {/* Quick Order Form */}
-        <div className="px-5 py-3 bg-white border-b border-gray-100 shrink-0">
+        <div className="px-5 py-3 bg-panel border-b border-line shrink-0">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted w-3.5 h-3.5" />
               <input
                 type="text"
                 placeholder="Customer name or phone…"
                 value={cartCustomer}
                 onChange={(e) => setCartCustomer(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
+                className="w-full pl-8 pr-3 py-2 text-sm bg-cream border border-line rounded-xl outline-none focus:border-olive-strong focus:bg-panel focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-muted"
               />
             </div>
             <div className="relative">
-              <Hash className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+              <Hash className="absolute left-3 top-1/2 -translate-y-1/2 text-muted w-3.5 h-3.5" />
               <input
                 type="text"
                 placeholder="Table number…"
                 value={cartTable}
                 onChange={(e) => setCartTable(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
+                className="w-full pl-8 pr-3 py-2 text-sm bg-cream border border-line rounded-xl outline-none focus:border-olive-strong focus:bg-panel focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-muted"
               />
             </div>
             <div className="relative">
-              <StickyNote className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+              <StickyNote className="absolute left-3 top-1/2 -translate-y-1/2 text-muted w-3.5 h-3.5" />
               <input
                 type="text"
                 placeholder="Kitchen notes (optional)…"
                 value={cartNotes}
                 onChange={(e) => setCartNotes(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
+                className="w-full pl-8 pr-3 py-2 text-sm bg-cream border border-line rounded-xl outline-none focus:border-olive-strong focus:bg-panel focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-muted"
               />
             </div>
           </div>
         </div>
 
         {/* Category Pills */}
-        <div className="px-5 py-2.5 bg-white border-b border-gray-100 shrink-0">
+        <div className="px-5 py-2.5 bg-panel border-b border-line shrink-0">
           <PosCategoryFilter
             categories={categories}
             selected={selectedCategory}
@@ -153,8 +153,8 @@ export default function NewOrder() {
           {filteredItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-center">
               <CatSilhouette pose="stretching" className="mb-3 h-14 w-auto" />
-              <p className="text-sm font-semibold text-gray-600">No items found</p>
-              <p className="text-xs text-gray-400 mt-1">Try a different search or category</p>
+              <p className="text-sm font-semibold text-muted">No items found</p>
+              <p className="text-xs text-muted mt-1">Try a different search or category</p>
               <button
                 onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
                 className="mt-3 text-xs text-olive-strong font-semibold hover:underline"
@@ -165,7 +165,7 @@ export default function NewOrder() {
           ) : (
             <>
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs text-gray-500 font-medium">
+                <p className="text-xs text-muted font-medium">
                   {filteredItems.length} item{filteredItems.length !== 1 ? 's' : ''}
                   {selectedCategory !== 'All' ? ` in ${selectedCategory}` : ''}
                   {searchQuery ? ` matching "${searchQuery}"` : ''}
@@ -191,19 +191,19 @@ export default function NewOrder() {
         <div className="fixed inset-0 z-50 xl:hidden">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-[rgba(68,64,52,0.45)] backdrop-blur-sm"
             onClick={() => setCartDrawerOpen(false)}
           />
           {/* Drawer */}
-          <div className="absolute right-0 top-0 bottom-0 w-80 sm:w-96 bg-white shadow-2xl flex flex-col animate-[slideInRight_0.25s_ease]">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <span className="font-bold text-gray-900 flex items-center gap-2">
+          <div className="absolute right-0 top-0 bottom-0 w-80 sm:w-96 bg-panel shadow-2xl flex flex-col animate-[slideInRight_0.25s_ease]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-line">
+              <span className="font-bold text-charcoal flex items-center gap-2">
                 <ShoppingCart size={16} className="text-olive-strong" />
                 Order Cart
               </span>
               <button
                 onClick={() => setCartDrawerOpen(false)}
-                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
+                className="p-1.5 rounded-lg hover:bg-cream-pressed text-muted transition-colors"
               >
                 <X size={16} />
               </button>

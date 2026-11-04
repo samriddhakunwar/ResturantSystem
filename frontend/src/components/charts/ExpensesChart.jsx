@@ -3,15 +3,16 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
+import { formatRs, formatRsShort } from '../../lib/format';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-gray-700 mb-1">{label}</p>
+    <div className="bg-panel border border-line rounded-xl shadow-lg p-3 text-xs">
+      <p className="font-semibold text-charcoal mb-1">{label}</p>
       {payload.map((p) => (
-        <p key={p.dataKey} style={{ color: p.fill }} className="font-medium">
-          {p.name}: ${p.value}
+        <p key={p.dataKey} className="font-medium">
+          {p.name}: {formatRs(p.value)}
         </p>
       ))}
     </div>
@@ -22,18 +23,18 @@ export default function ExpensesChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 0 }} barSize={10}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#c9b996" />
         <XAxis
           dataKey="month"
-          tick={{ fontSize: 11, fill: '#94a3b8' }}
+          tick={{ fontSize: 11, fill: '#625a49' }}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontSize: 11, fill: '#94a3b8' }}
+          tick={{ fontSize: 11, fill: '#625a49' }}
           axisLine={false}
           tickLine={false}
-          tickFormatter={(v) => `$${v}`}
+          tickFormatter={formatRsShort}
         />
         <Tooltip content={<CustomTooltip />} />
         <Legend
@@ -41,9 +42,9 @@ export default function ExpensesChart({ data }) {
           iconSize={8}
           wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }}
         />
-        <Bar dataKey="ingredients" name="Ingredients" fill="#ff5a1f" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="labor" name="Labor" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="utilities" name="Utilities" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="ingredients" name="Ingredients" fill="#566139" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="labor" name="Labor" fill="#f48d4a" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="utilities" name="Utilities" fill="#444034" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

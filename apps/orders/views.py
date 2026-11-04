@@ -2,6 +2,7 @@
 API views for the Order Management module.
 """
 from django.conf import settings
+from django.db import models
 from django.db.models import Count
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
@@ -32,6 +33,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         DELETE /orders/{id}/                  — delete an order
         PATCH  /orders/{id}/update-status/    — update order status only
         POST   /orders/{id}/confirm/          — accept a QR order and print its ticket
+        GET    /orders/kitchen/               — active orders with items for the kitchen board
 
     Useful filters: ``?status__in=pending,preparing,ready``, ``?source=qr``,
     ``?confirmed_at__isnull=true``, ``?created_at__date=2026-11-04``.
@@ -68,6 +70,24 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = serializer.save(source=Order.Source.POS, confirmed_at=timezone.now())
         if settings.KITCHEN_AUTO_PRINT_POS:
             queue_kitchen_ticket(order.pk)
+
+    @action(detail=False, methods=["get"])
+    def kitchen(self, request):
+        """
+        The kitchen board: every pending, preparing and ready order, plus
+        those served today, with their items (one query, no pagination).
+        """
+        active = [Order.Status.PENDING, Order.Status.PREPARING, Order.Status.READY]
+        today = timezone.localdate()
+        queryset = (
+            Order.objects.prefetch_related("items__menu_item")
+            .filter(
+                models.Q(status__in=active)
+                | models.Q(status=Order.Status.SERVED, updated_at__date=today)
+            )
+            .order_by("created_at")
+        )
+        return Response(OrderSerializer(queryset, many=True).data)
 
     @action(detail=True, methods=["post"])
     def confirm(self, request, pk=None):

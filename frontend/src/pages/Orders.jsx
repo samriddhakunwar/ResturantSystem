@@ -34,10 +34,10 @@ export default function Orders() {
   }, [orders, activeTab, search]);
 
   const tabColors = {
-    Pending:   'text-yellow-600 bg-yellow-50',
-    Preparing: 'text-blue-600 bg-blue-50',
-    Completed: 'text-green-600 bg-green-50',
-    Cancelled: 'text-gray-500 bg-gray-100',
+    Pending:   'text-ginger-ink bg-ginger-soft',
+    Preparing: 'text-olive-strong bg-olive-soft',
+    Completed: 'text-olive-strong bg-olive-soft',
+    Cancelled: 'text-muted bg-cream-pressed',
     All:       'text-olive-strong bg-olive-soft',
   };
 
@@ -57,7 +57,7 @@ export default function Orders() {
       {/* Filter Bar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         {/* Tabs */}
-        <div className="flex items-center gap-1.5 bg-white border border-gray-100 rounded-2xl p-1.5 shadow-sm overflow-x-auto">
+        <div className="flex items-center gap-1.5 bg-panel border border-line rounded-2xl p-1.5 shadow-sm overflow-x-auto">
           {TABS.map((tab) => {
             const count = tabCount(orders, tab);
             const isActive = tab === activeTab;
@@ -69,15 +69,15 @@ export default function Orders() {
                   flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold whitespace-nowrap
                   transition-all duration-150
                   ${isActive
-                    ? 'bg-olive-strong text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-50'
+                    ? 'bg-olive-strong text-cream shadow-sm'
+                    : 'text-muted hover:bg-cream'
                   }
                 `}
               >
                 {tab}
                 <span
                   className={`text-xs px-1.5 py-0.5 rounded-full font-bold
-                    ${isActive ? 'bg-white/20 text-white' : tabColors[tab]}`}
+                    ${isActive ? 'bg-panel text-cream' : tabColors[tab]}`}
                 >
                   {count}
                 </span>
@@ -93,7 +93,7 @@ export default function Orders() {
             onChange={setSearch}
             className="w-full sm:w-56"
           />
-          <button className="p-2.5 bg-white border border-gray-100 rounded-xl text-gray-400 hover:text-gray-600 shadow-sm transition-colors">
+          <button className="p-2.5 bg-panel border border-line rounded-xl text-muted hover:text-muted shadow-sm transition-colors">
             <RefreshCw className="w-4 h-4" />
           </button>
         </div>
@@ -103,8 +103,8 @@ export default function Orders() {
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <CatSilhouette pose="lying" className="mb-3 h-14 w-auto" />
-          <p className="text-gray-500 font-medium">No orders found</p>
-          <p className="text-gray-400 text-sm mt-1">Try a different filter or search term</p>
+          <p className="text-muted font-medium">No orders found</p>
+          <p className="text-muted text-sm mt-1">Try a different filter or search term</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">

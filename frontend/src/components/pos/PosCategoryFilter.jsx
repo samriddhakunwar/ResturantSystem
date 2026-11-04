@@ -14,13 +14,13 @@ export default function PosCategoryFilter({ categories, selected, onChange, coun
               flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold
               whitespace-nowrap shrink-0 transition-all duration-150 border
               ${isActive
-                ? 'bg-olive-strong text-white border-olive-strong shadow-sm'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-olive-strong hover:text-olive-dark hover:bg-olive-soft'
+                ? 'bg-olive-strong text-cream border-olive-strong shadow-sm'
+                : 'bg-panel text-muted border-line hover:border-olive-strong hover:text-olive-dark hover:bg-olive-soft'
               }
             `}
           >
             {cat}
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'}`}>
+            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isActive ? 'bg-panel text-cream' : 'bg-cream-pressed text-muted'}`}>
               {count}
             </span>
           </button>

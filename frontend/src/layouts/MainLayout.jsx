@@ -8,7 +8,7 @@ export default function MainLayout() {
   const isFullBleed = pathname === '/staff/new-order'; // POS page gets no padding
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-cream text-charcoal">
       {/* Sidebar */}
       <Sidebar />
 

@@ -4,6 +4,7 @@ import { Clock, MapPin, Printer, CheckCircle2, XCircle, ChefHat } from 'lucide-r
 import StatusBadge from '../ui/StatusBadge';
 import Button from '../ui/Button';
 import { usePOS } from '../../context/PosContext';
+import { formatRs } from '../../lib/format';
 
 export default function OrderCard({ order }) {
   const { updateOrderStatus, printKitchenTicket } = usePOS();
@@ -25,21 +26,21 @@ export default function OrderCard({ order }) {
   const nextStatus = getNextStatus(order.status);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
+    <div className="bg-panel rounded-2xl border border-line shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
       {/* Card Header */}
-      <div className="px-4 pt-4 pb-3 border-b border-gray-50">
+      <div className="px-4 pt-4 pb-3 border-b border-line">
         <div className="flex items-start justify-between gap-2">
           <div>
             <p className="text-sm font-bold text-olive-strong">{order.id}</p>
-            <p className="text-base font-semibold text-gray-900 mt-0.5">{order.customer}</p>
+            <p className="text-base font-semibold text-charcoal mt-0.5">{order.customer}</p>
           </div>
           <StatusBadge status={order.status} />
         </div>
         <div className="flex items-center gap-3 mt-2">
-          <span className="flex items-center gap-1 text-xs text-gray-500">
+          <span className="flex items-center gap-1 text-xs text-muted">
             <MapPin className="w-3 h-3" /> {order.table}
           </span>
-          <span className="flex items-center gap-1 text-xs text-gray-500">
+          <span className="flex items-center gap-1 text-xs text-muted">
             <Clock className="w-3 h-3" /> {order.time}
           </span>
         </div>
@@ -49,21 +50,21 @@ export default function OrderCard({ order }) {
       <div className="px-4 py-3 space-y-1.5 min-h-[90px]">
         {order.items.map((item, i) => (
           <div key={i} className="flex justify-between items-center text-sm">
-            <span className="text-gray-700">
-              <span className="font-semibold text-gray-500 mr-1">×{item.qty}</span>
+            <span className="text-charcoal">
+              <span className="font-semibold text-muted mr-1">×{item.qty}</span>
               {item.name}
             </span>
-            <span className="text-gray-600 font-medium">Rs {(item.price * item.qty).toFixed(2)}</span>
+            <span className="text-muted font-medium">{formatRs((item.price * item.qty))}</span>
           </div>
         ))}
       </div>
 
       {/* Footer */}
-      <div className="px-4 pb-4 pt-3 border-t border-gray-50">
+      <div className="px-4 pb-4 pt-3 border-t border-line">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <p className="text-xs text-gray-500">Total</p>
-            <p className="text-lg font-bold text-gray-900">Rs {order.amount.toFixed(2)}</p>
+            <p className="text-xs text-muted">Total</p>
+            <p className="text-lg font-bold text-charcoal">{formatRs(order.amount)}</p>
           </div>
           <StatusBadge status={order.paymentStatus} />
         </div>

@@ -6,6 +6,7 @@ import StatusBadge from '../components/ui/StatusBadge';
 import SearchBar from '../components/ui/SearchBar';
 import { usePOS } from '../context/PosContext';
 import { Clock, MapPin } from 'lucide-react';
+import { formatRs } from '../lib/format';
 
 export default function Billing() {
   const { bills: billingOrders } = usePOS();
@@ -43,8 +44,8 @@ export default function Billing() {
           {/* Summary strip */}
           <div className="flex gap-2">
             {[
-              { label: 'Paid', count: billingOrders.filter(i => i.paymentStatus === 'Paid').length, color: 'text-green-600 bg-green-50' },
-              { label: 'Unpaid', count: billingOrders.filter(i => i.paymentStatus === 'Unpaid').length, color: 'text-red-500 bg-red-50' },
+              { label: 'Paid', count: billingOrders.filter(i => i.paymentStatus === 'Paid').length, color: 'text-olive-strong bg-olive-soft' },
+              { label: 'Unpaid', count: billingOrders.filter(i => i.paymentStatus === 'Unpaid').length, color: 'text-danger bg-danger-soft' },
             ].map(({ label, count, color }) => (
               <div key={label} className={`flex-1 rounded-xl px-3 py-2 text-center ${color}`}>
                 <p className="text-xl font-bold">{count}</p>
@@ -67,30 +68,30 @@ export default function Billing() {
                   w-full text-left p-4 rounded-2xl border transition-all duration-150
                   ${selectedId === inv.id
                     ? 'border-olive bg-olive-soft shadow-sm'
-                    : 'border-gray-100 bg-white hover:border-olive-strong hover:bg-olive-soft shadow-sm'
+                    : 'border-line bg-panel hover:border-olive-strong hover:bg-olive-soft shadow-sm'
                   }
                 `}
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <div>
                     <p className="text-sm font-bold text-olive-strong">{inv.id}</p>
-                    <p className="text-sm font-semibold text-gray-900">{inv.customer}</p>
+                    <p className="text-sm font-semibold text-charcoal">{inv.customer}</p>
                   </div>
                   <StatusBadge status={inv.paymentStatus} />
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-1 text-xs text-gray-500">
+                  <span className="flex items-center gap-1 text-xs text-muted">
                     <MapPin className="w-3 h-3" /> {inv.table}
                   </span>
-                  <span className="flex items-center gap-1 text-xs text-gray-500">
+                  <span className="flex items-center gap-1 text-xs text-muted">
                     <Clock className="w-3 h-3" /> {inv.time}
                   </span>
-                  <span className="ml-auto text-sm font-bold text-gray-900">Rs {inv.total.toFixed(2)}</span>
+                  <span className="ml-auto text-sm font-bold text-charcoal">{formatRs(inv.total)}</span>
                 </div>
               </button>
             ))}
             {filtered.length === 0 && (
-              <div className="text-center py-10 text-gray-400">
+              <div className="text-center py-10 text-muted">
                 <p>No results found</p>
               </div>
             )}

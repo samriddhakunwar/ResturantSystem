@@ -46,6 +46,7 @@ export interface OrderVM {
   paymentMethod: string | null;
   amount: number;
   time: string;
+  createdAt: string;
   notes: string;
   items: OrderItemVM[];
 }
@@ -154,6 +155,7 @@ export function toOrderVM(order: ApiOrder): OrderVM {
     paymentMethod: null,
     amount: num(order.total),
     time: formatTime(order.created_at),
+    createdAt: order.created_at,
     notes: order.notes ?? '',
     items: (order.items ?? []).map((it) => ({
       name: it.menu_item_detail?.name ?? `#${it.menu_item}`,

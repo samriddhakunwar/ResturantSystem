@@ -47,6 +47,17 @@ class OrderFlowTests(TestCase):
         again = self.client.post(f"/api/v1/orders/orders/{order.id}/confirm/")
         self.assertEqual(again.status_code, 400)
 
+    def test_kitchen_board_lists_active_orders_with_items(self):
+        waiting = self.qr_order()
+        done = self.qr_order()
+        Order.objects.filter(pk=done.pk).update(status=Order.Status.COMPLETED)
+
+        res = self.client.get("/api/v1/orders/orders/kitchen/")
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual([o["id"] for o in res.data], [waiting.id])
+        self.assertEqual(res.data[0]["items"][0]["menu_item_detail"]["name"], "Tuna Melt Paws")
+
     def test_confirm_without_printer_does_not_fail(self):
         order = self.qr_order()
         with self.captureOnCommitCallbacks(execute=True):

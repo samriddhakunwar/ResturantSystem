@@ -49,18 +49,18 @@ export default function PrinterManager() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/50">
+    <div className="bg-panel rounded-2xl border border-line shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-line bg-cream">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-olive-soft rounded-lg flex items-center justify-center">
             <Printer className="w-4 h-4 text-olive-strong" />
           </div>
-          <h3 className="text-sm font-bold text-gray-800">Connected Printers</h3>
+          <h3 className="text-sm font-bold text-charcoal">Connected Printers</h3>
         </div>
         {apiOnline && (
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-olive-strong text-white hover:bg-olive-dark transition-colors active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-olive-strong text-cream hover:bg-olive-dark transition-colors active:scale-95"
           >
             <Plus size={14} /> {showForm ? 'Close' : 'Add Printer'}
           </button>
@@ -69,13 +69,13 @@ export default function PrinterManager() {
 
       <div className="px-5 py-4">
         {!apiOnline && (
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted">
             Connect the backend (set <code className="text-olive-strong">VITE_API_URL</code>) to manage thermal printers.
           </p>
         )}
 
         {msg && (
-          <div className={`mb-3 px-3 py-2 rounded-xl text-xs font-medium ${msg.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+          <div className={`mb-3 px-3 py-2 rounded-xl text-xs font-medium ${msg.ok ? 'bg-olive-soft text-olive-strong' : 'bg-danger-soft text-danger'}`}>
             {msg.text}
           </div>
         )}
@@ -89,12 +89,12 @@ export default function PrinterManager() {
                   placeholder="Printer name"
                   value={form.name}
                   onChange={(e) => set('name', e.target.value)}
-                  className="sm:col-span-2 px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg outline-none focus:border-olive-strong"
+                  className="sm:col-span-2 px-3 py-2 text-sm bg-panel border border-line rounded-lg outline-none focus:border-olive-strong"
                 />
                 <select
                   value={form.connection_type}
                   onChange={(e) => set('connection_type', e.target.value)}
-                  className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg outline-none focus:border-olive-strong"
+                  className="px-3 py-2 text-sm bg-panel border border-line rounded-lg outline-none focus:border-olive-strong"
                 >
                   <option value="lan">LAN (Network)</option>
                   <option value="usb">USB</option>
@@ -102,7 +102,7 @@ export default function PrinterManager() {
                 <select
                   value={form.role}
                   onChange={(e) => set('role', e.target.value)}
-                  className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg outline-none focus:border-olive-strong"
+                  className="px-3 py-2 text-sm bg-panel border border-line rounded-lg outline-none focus:border-olive-strong"
                 >
                   <option value="both">Kitchen & Billing</option>
                   <option value="kitchen">Kitchen</option>
@@ -115,14 +115,14 @@ export default function PrinterManager() {
                       placeholder="IP address (e.g. 192.168.1.50)"
                       value={form.ip_address}
                       onChange={(e) => set('ip_address', e.target.value)}
-                      className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg outline-none focus:border-olive-strong"
+                      className="px-3 py-2 text-sm bg-panel border border-line rounded-lg outline-none focus:border-olive-strong"
                     />
                     <input
                       placeholder="Port"
                       type="number"
                       value={form.port}
                       onChange={(e) => set('port', e.target.value)}
-                      className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg outline-none focus:border-olive-strong"
+                      className="px-3 py-2 text-sm bg-panel border border-line rounded-lg outline-none focus:border-olive-strong"
                     />
                   </>
                 ) : (
@@ -131,13 +131,13 @@ export default function PrinterManager() {
                       placeholder="USB Vendor ID (e.g. 0x04b8)"
                       value={form.usb_vendor_id}
                       onChange={(e) => set('usb_vendor_id', e.target.value)}
-                      className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg outline-none focus:border-olive-strong"
+                      className="px-3 py-2 text-sm bg-panel border border-line rounded-lg outline-none focus:border-olive-strong"
                     />
                     <input
                       placeholder="USB Product ID (e.g. 0x0202)"
                       value={form.usb_product_id}
                       onChange={(e) => set('usb_product_id', e.target.value)}
-                      className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg outline-none focus:border-olive-strong"
+                      className="px-3 py-2 text-sm bg-panel border border-line rounded-lg outline-none focus:border-olive-strong"
                     />
                   </>
                 )}
@@ -145,7 +145,7 @@ export default function PrinterManager() {
                 <button
                   onClick={handleAdd}
                   disabled={busy || !form.name}
-                  className="sm:col-span-2 py-2 rounded-lg bg-olive-strong text-white text-sm font-semibold hover:bg-olive-dark disabled:opacity-50 transition-colors"
+                  className="sm:col-span-2 py-2 rounded-lg bg-olive-strong text-cream text-sm font-semibold hover:bg-olive-dark disabled:opacity-50 transition-colors"
                 >
                   {busy ? 'Saving…' : 'Save Printer'}
                 </button>
@@ -154,38 +154,38 @@ export default function PrinterManager() {
 
             {/* Printer list */}
             {printers.length === 0 ? (
-              <p className="text-sm text-gray-400 py-2">No printers registered yet.</p>
+              <p className="text-sm text-muted py-2">No printers registered yet.</p>
             ) : (
               <div className="space-y-2">
                 {printers.map((p) => (
-                  <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100">
-                    <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 shrink-0">
+                  <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl border border-line">
+                    <div className="w-8 h-8 rounded-lg bg-cream-pressed flex items-center justify-center text-muted shrink-0">
                       {p.connectionType === 'usb' ? <Usb size={15} /> : <Wifi size={15} />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-gray-800 truncate">{p.name}</p>
-                      <p className="text-xs text-gray-400">{ROLE_LABEL[p.role] ?? p.role}</p>
+                      <p className="text-sm font-semibold text-charcoal truncate">{p.name}</p>
+                      <p className="text-xs text-muted">{ROLE_LABEL[p.role] ?? p.role}</p>
                     </div>
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${p.isActive ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${p.isActive ? 'bg-olive-soft text-olive-strong' : 'bg-cream-pressed text-muted'}`}>
                       {p.isActive ? 'Active' : 'Inactive'}
                     </span>
                     <button
                       onClick={() => handleTest(p.id)}
                       title="Test print"
-                      className="p-2 rounded-lg text-gray-400 hover:text-olive-dark hover:bg-olive-soft transition-colors"
+                      className="p-2 rounded-lg text-muted hover:text-olive-dark hover:bg-olive-soft transition-colors"
                     >
                       <Send size={14} />
                     </button>
                     <button
                       onClick={() => togglePrinterActive(p.id, !p.isActive)}
-                      className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-gray-200 text-gray-600 hover:border-olive-strong hover:text-olive-dark transition-colors"
+                      className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-line text-muted hover:border-olive-strong hover:text-olive-dark transition-colors"
                     >
                       {p.isActive ? 'Disable' : 'Enable'}
                     </button>
                     <button
                       onClick={() => removePrinter(p.id)}
                       title="Delete printer"
-                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                      className="p-2 rounded-lg text-muted hover:text-danger hover:bg-danger-soft transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>

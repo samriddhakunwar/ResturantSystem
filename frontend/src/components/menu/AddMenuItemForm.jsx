@@ -5,17 +5,24 @@ import { usePOS } from '../../context/PosContext';
 import { MENU_CATEGORIES, doodleFor } from '../../data/menuManagementData';
 import Doodle from '../decor/Doodle';
 import ItemThumb from '../ui/ItemThumb';
+import CafeDetailsFields from './CafeDetailsFields';
+import { formatRs } from '../../lib/format';
 
 const EMPTY_FORM = {
   name: '',
   description: '',
   price: '',
-  category: MENU_CATEGORIES[0],
+  category: '',
   image: '',
+  dietaryTags: [],
+  isFeatured: false,
+  recommendedById: null,
 };
 
 export default function AddMenuItemForm() {
-  const { addMenuItem } = usePOS();
+  const { addMenuItem, categories, online } = usePOS();
+  // Live categories when the backend is up, the demo list otherwise.
+  const categoryNames = online && categories.length ? categories.map((c) => c.name) : MENU_CATEGORIES;
   const [form, setForm] = useState(EMPTY_FORM);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
@@ -30,7 +37,6 @@ export default function AddMenuItemForm() {
     if (!form.name.trim())             e.name = 'Item name is required';
     if (!form.price || isNaN(Number(form.price)) || Number(form.price) < 0)
                                        e.price = 'Enter a valid price';
-    if (!form.category)                e.category = 'Select a category';
     return e;
   };
 
@@ -43,9 +49,12 @@ export default function AddMenuItemForm() {
       name: form.name.trim(),
       description: form.description.trim(),
       price: Number(form.price),
-      category: form.category,
+      category: form.category || categoryNames[0],
       image: form.image.trim() || '',
       available: true,
+      dietaryTags: form.dietaryTags,
+      isFeatured: form.isFeatured,
+      recommendedById: form.recommendedById,
     });
 
     setForm(EMPTY_FORM);
@@ -56,39 +65,39 @@ export default function AddMenuItemForm() {
 
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-panel rounded-2xl border border-line shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+      <div className="px-5 py-4 border-b border-line flex items-center gap-3">
         <div className="w-9 h-9 bg-olive-soft rounded-xl flex items-center justify-center">
           <Plus className="w-5 h-5 text-olive-strong" />
         </div>
         <div>
-          <p className="text-sm font-bold text-gray-900">Add New Item</p>
-          <p className="text-xs text-gray-400">Fill in details to add to menu</p>
+          <p className="text-sm font-bold text-charcoal">Add New Item</p>
+          <p className="text-xs text-muted">Fill in details to add to menu</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="px-5 py-4 space-y-4">
         {/* Item Name */}
         <div>
-          <label className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1.5 block">
-            Item Name <span className="text-red-400">*</span>
+          <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">
+            Item Name <span className="text-danger">*</span>
           </label>
           <input
             type="text"
             placeholder="e.g. Catpuccino"
             value={form.name}
             onChange={(e) => set('name', e.target.value)}
-            className={`w-full px-3.5 py-2.5 text-sm bg-gray-50 border rounded-xl outline-none transition-all
-              focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400
-              ${errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+            className={`w-full px-3.5 py-2.5 text-sm bg-cream border rounded-xl outline-none transition-all
+              focus:bg-panel focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-muted
+              ${errors.name ? 'border-danger bg-danger-soft' : 'border-line'}`}
           />
-          {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+          {errors.name && <p className="text-xs text-danger mt-1">{errors.name}</p>}
         </div>
 
         {/* Description */}
         <div>
-          <label className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1.5 block">
+          <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">
             Description
           </label>
           <textarea
@@ -96,18 +105,18 @@ export default function AddMenuItemForm() {
             placeholder="Brief description of the item…"
             value={form.description}
             onChange={(e) => set('description', e.target.value)}
-            className="w-full px-3.5 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none resize-none
-              focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400 transition-all"
+            className="w-full px-3.5 py-2.5 text-sm bg-cream border border-line rounded-xl outline-none resize-none
+              focus:bg-panel focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-muted transition-all"
           />
         </div>
 
         {/* Price */}
         <div>
-          <label className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1.5 block">
-            Price (Rs) <span className="text-red-400">*</span>
+          <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">
+            Price (Rs) <span className="text-danger">*</span>
           </label>
           <div className="relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">Rs</span>
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-muted">Rs</span>
             <input
               type="number"
               min="0"
@@ -115,31 +124,32 @@ export default function AddMenuItemForm() {
               placeholder="0"
               value={form.price}
               onChange={(e) => set('price', e.target.value)}
-              className={`w-full pl-9 pr-3.5 py-2.5 text-sm font-semibold bg-gray-50 border rounded-xl outline-none transition-all
-                focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400
-                ${errors.price ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+              className={`w-full pl-9 pr-3.5 py-2.5 text-sm font-semibold bg-cream border rounded-xl outline-none transition-all
+                focus:bg-panel focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-muted
+                ${errors.price ? 'border-danger bg-danger-soft' : 'border-line'}`}
             />
           </div>
-          {errors.price && <p className="text-xs text-red-500 mt-1">{errors.price}</p>}
+          {errors.price && <p className="text-xs text-danger mt-1">{errors.price}</p>}
         </div>
 
         {/* Category */}
         <div>
-          <label className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1.5 block">
-            Category <span className="text-red-400">*</span>
+          <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">
+            Category <span className="text-danger">*</span>
           </label>
           <div className="grid grid-cols-2 gap-2">
-            {MENU_CATEGORIES.map((cat) => {
-              const isActive = form.category === cat;
+            {categoryNames.map((cat) => {
+              const isActive = (form.category || categoryNames[0]) === cat;
               return (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => set('category', cat)}
+                  aria-pressed={isActive}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all duration-150 active:scale-95
                     ${isActive
                       ? 'border-olive-strong bg-olive-soft text-olive-strong'
-                      : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-olive-strong hover:bg-olive-soft'
+                      : 'border-line bg-cream text-muted hover:border-olive-strong hover:bg-olive-soft'
                     }`}
                 >
                   <Doodle name={doodleFor(cat)} className="h-4 w-4" />
@@ -148,29 +158,32 @@ export default function AddMenuItemForm() {
               );
             })}
           </div>
-          {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category}</p>}
+          {errors.category && <p className="text-xs text-danger mt-1">{errors.category}</p>}
         </div>
+
+        {/* Café details */}
+        <CafeDetailsFields value={form} onChange={(patch) => setForm((f) => ({ ...f, ...patch }))} />
 
         {/* Image URL */}
         <div>
-          <label className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1.5 block">
-            Image URL <span className="text-gray-400 font-normal">(optional)</span>
+          <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">
+            Image URL <span className="text-muted font-normal">(optional)</span>
           </label>
           <div className="relative">
-            <ImagePlus className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <ImagePlus className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
             <input
               type="text"
               placeholder="https://…"
               value={form.image}
               onChange={(e) => set('image', e.target.value)}
-              className="w-full pl-9 pr-9 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none
-                focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400 transition-all"
+              className="w-full pl-9 pr-9 py-2.5 text-sm bg-cream border border-line rounded-xl outline-none
+                focus:bg-panel focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-muted transition-all"
             />
             {form.image && (
               <button
                 type="button"
                 onClick={() => set('image', '')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-muted"
               >
                 <X size={14} />
               </button>
@@ -179,7 +192,7 @@ export default function AddMenuItemForm() {
 
           {/* Image preview */}
           {form.image && (
-            <div className="mt-2 h-24 rounded-xl overflow-hidden bg-gray-100">
+            <div className="mt-2 h-24 rounded-xl overflow-hidden bg-cream-pressed">
               <img
                 src={form.image}
                 alt="preview"
@@ -195,25 +208,25 @@ export default function AddMenuItemForm() {
           <div className="rounded-xl border-2 p-3 flex items-center gap-3 transition-all border-olive bg-olive-soft">
             <ItemThumb item={{ image: form.image, category: form.category }} className="w-10 h-10" />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-gray-900 truncate">{form.name}</p>
-              <p className="text-xs text-gray-500 truncate">{form.description || 'No description'}</p>
+              <p className="text-sm font-bold text-charcoal truncate">{form.name}</p>
+              <p className="text-xs text-muted truncate">{form.description || 'No description'}</p>
             </div>
             {form.price && (
-              <span className="text-sm font-black text-olive-strong shrink-0">Rs {form.price}</span>
+              <span className="text-sm font-black text-olive-strong shrink-0">{formatRs(form.price)}</span>
             )}
           </div>
         )}
 
         {/* Divider */}
-        <div className="border-t border-gray-100" />
+        <div className="border-t border-line" />
 
         {/* Submit */}
         <button
           type="submit"
           className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all duration-150 active:scale-[0.98] shadow-sm
             ${success
-              ? 'bg-green-500 text-white shadow-green-200'
-              : 'bg-olive-strong hover:bg-olive-dark text-white'
+              ? 'bg-olive-strong text-cream shadow-green-200'
+              : 'bg-olive-strong hover:bg-olive-dark text-cream'
             }`}
         >
           {success ? (
@@ -228,7 +241,7 @@ export default function AddMenuItemForm() {
           <button
             type="button"
             onClick={() => { setForm(EMPTY_FORM); setErrors({}); }}
-            className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors text-center"
+            className="w-full text-xs text-muted hover:text-muted transition-colors text-center"
           >
             Clear form
           </button>
