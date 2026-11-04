@@ -1,0 +1,198 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Quicksand:wght@300;500;600;700&family=Sacramento&display=swap");
+
+/* Whisker & Brew tokens — mirror of tokens.json */
+:root {
+  --cream: #fff1d7;
+  --cream-pressed: #ffeac8;
+  --panel: #e3d5bb;
+  --paw-faint: #ded2ba;
+  --olive: #77814f;
+  --olive-strong: #566139;
+  --olive-dark: #41452c;
+  --charcoal: #444034;
+  --ink-muted: #625a49;
+  --on-olive: var(--cream);
+  --line: #c9b996;
+  --disabled: #8f8f8f;
+  --disabled-ink: #7a7a7a;
+  --ginger: #f48d4a;
+  --ginger-ink: #9c4a16;
+  --ginger-soft: #fbd9bf;
+  --calico-brown: #854337;
+  --calico-tan: #cdac83;
+  --bean-pink: #f4b8c2;
+  --olive-soft: #dfe3c8;
+  --danger: #9a3324;
+  --danger-soft: #f6d5cc;
+  --focus: var(--charcoal);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --shadow-lift: 0 6px 16px rgba(68, 64, 52, 0.18);
+  --shadow-sheet: 0 -8px 24px rgba(68, 64, 52, 0.16);
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: Quicksand, "Nunito", system-ui, sans-serif;
+  --font-script: Sacramento, "Brush Script MT", cursive;
+}
+
+/* Whisker & Brew — component styles. Every value reads a token from tokens.css. */
+
+body { margin: 0; font-family: var(--font-body); font-weight: 500; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+.wb-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; padding: var(--space-4); }
+.wb-stack { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4); }
+.wb-state { font-size: 14px; line-height: 20px; font-weight: 300; color: var(--ink-muted); margin: 0 0 var(--space-2); }
+.wb-script { font-family: var(--font-script); font-size: 36px; line-height: 40px; color: var(--olive); font-weight: 400; }
+
+/* ── Focus: 2px cream gap, then 2px charcoal ring ───────────────────── */
+.wb-focusable:focus-visible, .wb-btn:focus-visible, .wb-tab:focus-visible, .wb-slot:focus-visible, .wb-field input:focus-visible, .wb-field textarea:focus-visible, .wb-social a:focus-visible, .wb-chip-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--cream), 0 0 0 4px var(--focus);
+}
+
+/* ── Panel (the kit's beige section card with a centred display title) ─ */
+.wb-panel { background: var(--panel); border-radius: var(--radius-lg); padding: var(--space-5); position: relative; overflow: hidden; }
+.wb-panel-title { margin: 0 0 var(--space-4); text-align: center; font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height: 32px; color: var(--olive-dark); }
+
+/* ── Button ───────────────────────────────────────────────────────────── */
+.wb-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 44px; padding: 0 var(--space-5); border-radius: var(--radius-pill);
+  border: 1.5px solid transparent; cursor: pointer;
+  font-family: var(--font-body); font-size: 13px; line-height: 16px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease; white-space: nowrap;
+}
+.wb-btn--light { background: var(--cream); color: var(--olive-strong); }
+.wb-btn--primary { background: var(--olive-strong); color: var(--on-olive); }
+.wb-btn--outline { background: transparent; color: var(--olive-strong); border-color: var(--olive); }
+/* Hover: grows a little and lifts */
+.wb-btn:hover, .wb-btn.is-hover { transform: scale(1.06); box-shadow: var(--shadow-lift); }
+/* Active = the current / selected one (aria-pressed, aria-current): a fine outline */
+.wb-btn--light[aria-pressed="true"], .wb-btn--light.is-active { border-color: var(--olive-strong); }
+.wb-btn--primary[aria-pressed="true"], .wb-btn--primary.is-active { border-color: var(--cream); box-shadow: 0 0 0 1.5px var(--olive-strong); }
+/* Pressed = while the pointer is down */
+.wb-btn--light:active, .wb-btn--light.is-pressed { background: var(--cream-pressed); border-color: var(--olive-strong); transform: scale(1.06); }
+.wb-btn--primary:active, .wb-btn--primary.is-pressed { background: var(--olive-dark); border-color: var(--cream); transform: scale(1.06); }
+.wb-btn:disabled, .wb-btn.is-disabled { background: var(--disabled); color: var(--disabled-ink); border-color: transparent; cursor: not-allowed; transform: none; box-shadow: none; }
+.wb-btn--sm { min-height: 36px; padding: 0 var(--space-4); font-size: 12px; }
+.wb-btn--block { width: 100%; }
+
+/* ── Chips and badges ─────────────────────────────────────────────────── */
+.wb-chip { display: inline-flex; align-items: center; gap: var(--space-1); height: 26px; padding: 0 10px; border-radius: var(--radius-pill); font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: .03em; background: var(--cream); color: var(--charcoal); border: 1px solid var(--line); white-space: nowrap; }
+.wb-chip--veg { background: var(--olive-soft); color: var(--olive-strong); border-color: transparent; }
+.wb-chip--new { background: var(--ginger-soft); color: var(--ginger-ink); border-color: transparent; }
+.wb-chip--allergen { background: var(--danger-soft); color: var(--danger); border-color: transparent; }
+.wb-chip--pick { background: var(--olive-strong); color: var(--on-olive); border-color: transparent; }
+.wb-chip svg { width: 12px; height: 12px; flex: none; }
+.wb-chip-toggle { cursor: pointer; height: 36px; padding: 0 var(--space-4); font-size: 13px; background: var(--cream); color: var(--olive-strong); border: 1.5px solid var(--olive); }
+.wb-chip-toggle[aria-pressed="true"] { background: var(--olive-strong); color: var(--on-olive); border-color: var(--olive-strong); }
+
+/* ── Category tabs ────────────────────────────────────────────────────── */
+.wb-tabs { display: flex; gap: var(--space-2); overflow-x: auto; padding: var(--space-3) var(--space-4); background: var(--cream); scrollbar-width: none; }
+.wb-tab { flex: none; height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1.5px solid transparent; background: var(--panel); color: var(--olive-dark); font: 700 14px/20px var(--font-body); cursor: pointer; }
+.wb-tab[aria-selected="true"] { background: var(--olive-strong); color: var(--on-olive); }
+
+/* ── Menu item card ───────────────────────────────────────────────────── */
+.wb-item { display: grid; grid-template-columns: 96px 1fr; gap: var(--space-3); background: var(--panel); border-radius: var(--radius-md); padding: var(--space-3); }
+.wb-item-img { width: 96px; height: 96px; border-radius: var(--radius-sm); background: var(--cream); display: grid; place-items: center; overflow: hidden; }
+.wb-item-img img { width: 72%; height: auto; }
+.wb-item-name { margin: 0; font: 700 18px/24px var(--font-body); color: var(--charcoal); }
+.wb-item-desc { margin: 2px 0 var(--space-2); font: 500 14px/20px var(--font-body); color: var(--ink-muted); }
+.wb-item-tags { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-bottom: var(--space-2); }
+.wb-item-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.wb-price { font: 700 18px/24px var(--font-body); color: var(--olive-strong); font-variant-numeric: tabular-nums; }
+.wb-add { width: 40px; height: 40px; padding: 0; min-height: 40px; font-size: 22px; letter-spacing: 0; }
+.wb-item.is-soldout .wb-item-img img { opacity: .45; }
+.wb-item.is-soldout .wb-item-name, .wb-item.is-soldout .wb-price { color: var(--ink-muted); }
+.wb-soldout { font: 700 13px/16px var(--font-body); color: var(--ginger-ink); background: var(--cream); padding: 4px 10px; border-radius: var(--radius-pill); }
+
+/* ── Quantity stepper ─────────────────────────────────────────────────── */
+.wb-qty { display: inline-flex; align-items: center; gap: var(--space-2); background: var(--cream); border-radius: var(--radius-pill); padding: 4px; }
+.wb-qty button { width: 32px; height: 32px; border-radius: var(--radius-pill); border: 0; background: var(--olive-strong); color: var(--on-olive); font: 700 18px/1 var(--font-body); cursor: pointer; }
+.wb-qty output { min-width: 20px; text-align: center; font: 700 16px/20px var(--font-body); font-variant-numeric: tabular-nums; }
+
+/* ── Floating cart bar ────────────────────────────────────────────────── */
+.wb-cartbar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: 56px; padding: 0 var(--space-2) 0 var(--space-5); border-radius: var(--radius-pill); background: var(--olive-dark); color: var(--on-olive); box-shadow: var(--shadow-lift); border: 0; width: 100%; cursor: pointer; font-family: var(--font-body); }
+.wb-cartbar-count { font: 700 15px/20px var(--font-body); }
+.wb-cartbar-cta { display: inline-flex; align-items: center; gap: var(--space-2); height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-pill); background: var(--cream); color: var(--olive-dark); font: 700 13px/16px var(--font-body); letter-spacing: .06em; text-transform: uppercase; }
+
+/* ── Order status stepper ─────────────────────────────────────────────── */
+.wb-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); position: relative; }
+.wb-steps::before { content: ""; position: absolute; left: 10%; right: 10%; top: 13px; height: 3px; background: var(--line); border-radius: var(--radius-pill); }
+.wb-steps .wb-steps-fill { position: absolute; left: 10%; top: 13px; height: 3px; background: var(--olive-strong); border-radius: var(--radius-pill); }
+.wb-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); text-align: center; font: 600 12px/16px var(--font-body); color: var(--ink-muted); }
+.wb-step-dot { width: 28px; height: 28px; border-radius: var(--radius-pill); background: var(--cream); border: 3px solid var(--line); display: grid; place-items: center; box-sizing: border-box; }
+.wb-step.is-done .wb-step-dot { background: var(--olive-strong); border-color: var(--olive-strong); }
+.wb-step.is-done .wb-step-dot img { width: 14px; height: 14px; filter: brightness(0) invert(1); }
+.wb-step.is-current { color: var(--charcoal); font-weight: 700; }
+.wb-step.is-current .wb-step-dot { border-color: var(--olive-strong); background: var(--cream); }
+.wb-steps-cat { position: absolute; top: -40px; height: 38px; transform: translateX(-50%); }
+
+/* ── Cat profile card ─────────────────────────────────────────────────── */
+.wb-cat { background: var(--panel); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; padding: var(--space-2); }
+.wb-cat-photo { aspect-ratio: 4 / 3; background: var(--cream); border-radius: var(--radius-sm); overflow: hidden; position: relative; }
+.wb-cat-photo > img.photo { left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+.wb-cat-photo img { position: absolute; left: 15%; top: 14%; width: 70%; height: 72%; object-fit: contain; }
+.wb-cat-photo .wb-chip { position: absolute; top: var(--space-2); left: var(--space-2); }
+.wb-cat-body { padding: var(--space-3) var(--space-2) var(--space-2); }
+.wb-cat-name { margin: 0; font: 800 22px/28px var(--font-display); color: var(--olive-dark); }
+.wb-cat-meta { margin: 0 0 var(--space-2); font: 600 13px/18px var(--font-body); color: var(--ink-muted); }
+.wb-cat-tags { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.wb-here { display: inline-flex; align-items: center; gap: 6px; font: 700 12px/16px var(--font-body); color: var(--olive-strong); }
+.wb-here::before { content: ""; width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--olive-strong); }
+
+/* ── Avatar strip ("Meet the cats here today") ────────────────────────── */
+.wb-avatars { display: flex; gap: var(--space-3); overflow-x: auto; padding: var(--space-2) var(--space-4); }
+.wb-avatar { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--charcoal); font: 700 13px/16px var(--font-body); flex: none; }
+.wb-avatar span { width: 64px; height: 64px; border-radius: var(--radius-pill); background: var(--panel); display: grid; place-items: center; border: 2px solid var(--olive); }
+.wb-avatar img { width: 44px; }
+
+/* ── Time-slot picker ─────────────────────────────────────────────────── */
+.wb-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: var(--space-2); }
+.wb-slot { height: 52px; border-radius: var(--radius-pill); border: 1.5px solid var(--olive); background: var(--cream); color: var(--olive-strong); font: 700 15px/18px var(--font-body); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.wb-slot small { font: 600 11px/14px var(--font-body); color: var(--ink-muted); }
+.wb-slot[aria-pressed="true"] { background: var(--olive-strong); color: var(--on-olive); border-color: var(--olive-strong); }
+.wb-slot[aria-pressed="true"] small { color: var(--on-olive); }
+.wb-slot:disabled { background: var(--panel); border-color: transparent; color: var(--ink-muted); cursor: not-allowed; text-decoration: line-through; }
+
+/* ── Form field ───────────────────────────────────────────────────────── */
+.wb-field { display: flex; flex-direction: column; gap: 6px; }
+.wb-field label { font: 700 14px/20px var(--font-body); color: var(--charcoal); }
+.wb-field input, .wb-field textarea { height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-sm); border: 1.5px solid var(--olive); background: var(--cream); color: var(--charcoal); font: 500 16px/24px var(--font-body); }
+.wb-field textarea { height: 96px; padding: var(--space-3) var(--space-4); resize: vertical; }
+.wb-field input::placeholder, .wb-field textarea::placeholder { color: var(--ink-muted); }
+.wb-field-help { font: 500 13px/18px var(--font-body); color: var(--ink-muted); }
+.wb-field.is-error input { border-color: var(--danger); }
+.wb-field-error { display: flex; gap: 6px; align-items: center; font: 600 13px/18px var(--font-body); color: var(--danger); }
+.wb-check { display: flex; gap: var(--space-3); align-items: flex-start; font: 500 15px/22px var(--font-body); }
+.wb-check input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--olive-strong); flex: none; }
+
+/* ── Table tent (printed QR card) ─────────────────────────────────────── */
+.wb-tent { width: 280px; background: var(--cream); border-radius: var(--radius-md); border: 2px dashed var(--line); padding: var(--space-5) var(--space-4); display: flex; flex-direction: column; align-items: center; gap: var(--space-2); text-align: center; position: relative; overflow: hidden; }
+.wb-tent-cafe { margin: 0; font: 800 22px/26px var(--font-display); color: var(--charcoal); }
+.wb-tent-qr { width: 168px; height: 168px; background: #ffffff; padding: 10px; border-radius: var(--radius-sm); box-sizing: border-box; }
+.wb-tent-qr svg { width: 100%; height: 100%; display: block; }
+.wb-tent-cta { margin: 0; font: 700 15px/20px var(--font-body); color: var(--olive-strong); }
+.wb-tent-table { font: 800 40px/44px var(--font-display); color: var(--olive-dark); margin: 0; }
+.wb-tent-wifi { font: 600 12px/16px var(--font-body); color: var(--ink-muted); margin: 0; }
+@media print { .wb-tent { border-style: solid; break-inside: avoid; } }
+
+/* ── Social links ─────────────────────────────────────────────────────── */
+.wb-social { display: flex; gap: var(--space-4); align-items: center; }
+.wb-social a { width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--radius-pill); }
+.wb-social i { width: 28px; height: 28px; display: block; background: var(--olive-strong); -webkit-mask: var(--icon) center / contain no-repeat; mask: var(--icon) center / contain no-repeat; }
+.wb-social--muted i { background: var(--cream); }
+
+/* ── Paw peek (coloured paws reaching in from the right edge) ─────────── */
+.wb-pawpeek { position: absolute; right: 0; width: 120px; height: auto; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-btn, .wb-btn:hover, .wb-btn:active { transition: none; transform: none; }
+}
