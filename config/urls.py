@@ -1,5 +1,5 @@
 """
-Root URL configuration for the Restaurant POS System.
+Root URL configuration for the Whisker & Brew cat café system.
 """
 from django.conf import settings
 from django.conf.urls.static import static
@@ -20,6 +20,12 @@ urlpatterns = [
     path("api/v1/printers/", include("apps.printers.urls")),
     path("api/v1/reports/", include("apps.reports.urls")),
     path("api/v1/expenses/", include("apps.expenses.urls")),
+    path("api/v1/auth/", include("apps.accounts.urls")),
+    path("api/v1/tables/", include("apps.tables.urls")),
+    path("api/v1/cats/", include("apps.cats.urls")),
+    path("api/v1/bookings/", include("apps.bookings.urls")),
+    # ── Guest-facing (no login) ───────────────
+    path("api/v1/public/", include("apps.cafe.urls")),
     # ── API Documentation ─────────────────────
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

@@ -11,11 +11,6 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # ──────────────────────────────────────────────
-# CORS — allow everything in development
-# ──────────────────────────────────────────────
-CORS_ALLOW_ALL_ORIGINS = True
-
-# ──────────────────────────────────────────────
 # Django Debug Toolbar
 # ──────────────────────────────────────────────
 try:

@@ -26,10 +26,12 @@ class MenuItemAdmin(admin.ModelAdmin):
         "category",
         "price",
         "is_available",
+        "is_featured",
+        "recommended_by",
         "display_order",
         "created_at",
     ]
-    list_filter = ["category", "is_available"]
+    list_filter = ["category", "is_available", "is_featured"]
     search_fields = ["name", "description"]
     list_editable = ["price", "is_available", "display_order"]
     list_select_related = ["category"]

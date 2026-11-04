@@ -51,13 +51,13 @@ class MenuItemViewSet(viewsets.ModelViewSet):
     """
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ["category", "is_available"]
+    filterset_fields = ["category", "is_available", "is_featured", "recommended_by"]
     search_fields = ["name", "description"]
     ordering_fields = ["name", "price", "display_order", "created_at"]
     ordering = ["display_order", "name"]
 
     def get_queryset(self):
-        return MenuItem.objects.select_related("category")
+        return MenuItem.objects.select_related("category", "recommended_by")
 
     def get_serializer_class(self):
         if self.action == "list":

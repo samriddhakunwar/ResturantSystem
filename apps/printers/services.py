@@ -259,7 +259,7 @@ def _send_lan(printer: Printer, content: str) -> None:
 
 # ── Public API ───────────────────────────────────────────────
 
-def print_kitchen_ticket(order: Order, printer: Printer | None = None) -> PrintJob:
+def print_kitchen_ticket(order: Order, printer: Printer | None = None) -> PrintJob | None:
     """
     Format and send a kitchen ticket to the appropriate printer.
 
@@ -275,15 +275,7 @@ def print_kitchen_ticket(order: Order, printer: Printer | None = None) -> PrintJ
             .first()
         )
     if printer is None:
-        # No printer configured — still log the job
-        job = PrintJob.objects.create(
-            printer_id=None if True else 0,  # handled below
-            job_type=PrintJob.JobType.KITCHEN_TICKET,
-            order=order,
-            status=PrintJob.Status.FAILED,
-            error_message="No active kitchen printer configured.",
-        )
-        # Since printer is required FK, create a fallback
+        # PrintJob.printer is a required FK, so there is nothing to log a job against.
         logger.warning("No active kitchen printer found for order %s", order.order_number)
         return None
 

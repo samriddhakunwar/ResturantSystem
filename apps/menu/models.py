@@ -10,6 +10,9 @@ from django.db import models
 
 from utils.models import TimeStampedModel
 
+# Dietary tags a menu item may carry (rendered as Chips on the QR menu).
+DIETARY_TAGS = ["veg", "vegan", "gluten_free", "contains_nuts", "contains_dairy"]
+
 
 class Category(TimeStampedModel):
     """A grouping label for menu items."""
@@ -82,6 +85,23 @@ class MenuItem(TimeStampedModel):
         default=0,
         db_index=True,
         help_text="Lower numbers appear first within a category.",
+    )
+    dietary_tags = models.JSONField(
+        default=list,
+        blank=True,
+        help_text=f"Any of: {', '.join(DIETARY_TAGS)}.",
+    )
+    is_featured = models.BooleanField(
+        default=False,
+        help_text="Highlighted on the guest QR menu.",
+    )
+    recommended_by = models.ForeignKey(
+        "cats.Cat",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="recommended_items",
+        help_text="A resident cat's pick, shown as \"Momo's pick\".",
     )
 
     class Meta(TimeStampedModel.Meta):

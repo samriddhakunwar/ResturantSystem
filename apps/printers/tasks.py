@@ -5,6 +5,9 @@ Background tasks for async print job processing and retries.
 """
 import logging
 
+from django.conf import settings
+from django.db import transaction
+
 from apps.orders.models import Order
 
 from .models import PrintJob
@@ -12,13 +15,20 @@ from .services import print_kitchen_ticket, print_customer_bill
 
 logger = logging.getLogger(__name__)
 
+try:
+    from celery import shared_task  # pyrefly: ignore
+except ImportError:  # Celery isn't installed: tasks are plain functions.
+    def shared_task(*args, **kwargs):
+        return lambda func: func
 
+
+@shared_task(name="printers.send_kitchen_ticket")
 def send_kitchen_ticket_async(order_id: int) -> None:
     """
     Background task: print a kitchen ticket for the given order.
 
-    Called automatically when a new order is created (via signal).
-    Falls back to sync execution if Celery is not available.
+    Queued by ``queue_kitchen_ticket`` when staff confirm a QR order (and for
+    POS orders when ``KITCHEN_AUTO_PRINT_POS`` is on).
     """
     try:
         order = Order.objects.get(pk=order_id)
@@ -38,6 +48,27 @@ def send_kitchen_ticket_async(order_id: int) -> None:
             "No printer available for kitchen ticket (order %s).",
             order.order_number,
         )
+
+
+def queue_kitchen_ticket(order_id: int) -> None:
+    """
+    Print an order's kitchen ticket once the current transaction commits.
+
+    Uses Celery when ``CELERY_ENABLED`` is on and the broker accepts the task;
+    otherwise prints synchronously so a ticket is never silently dropped.
+    """
+
+    def _dispatch():
+        if settings.CELERY_ENABLED and hasattr(send_kitchen_ticket_async, "delay"):
+            try:
+                send_kitchen_ticket_async.delay(order_id)
+                return
+            except Exception:  # broker down — fall through to sync printing
+                logger.warning("Celery unavailable; printing order %s synchronously.", order_id)
+        send_kitchen_ticket_async(order_id)
+
+    # robust: a printer fault must never turn the confirm request into a 500.
+    transaction.on_commit(_dispatch, robust=True)
 
 
 def send_customer_bill_async(order_id: int) -> None:

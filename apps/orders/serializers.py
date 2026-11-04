@@ -37,8 +37,12 @@ class OrderListSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "order_number",
+            "public_id",
             "status",
+            "source",
+            "table",
             "table_number",
+            "confirmed_at",
             "total",
             "items_count",
             "created_at",
@@ -55,8 +59,12 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "order_number",
+            "public_id",
             "status",
+            "source",
+            "table",
             "table_number",
+            "confirmed_at",
             "notes",
             "subtotal",
             "total",
@@ -67,6 +75,9 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id",
             "order_number",
+            "public_id",
+            "source",
+            "confirmed_at",
             "subtotal",
             "total",
             "created_at",
@@ -95,6 +106,7 @@ class OrderSerializer(serializers.ModelSerializer):
         items_data = validated_data.pop("items", None)
 
         # Update order fields
+        instance.table = validated_data.get("table", instance.table)
         instance.table_number = validated_data.get(
             "table_number", instance.table_number
         )
@@ -123,12 +135,19 @@ class OrderStatusSerializer(serializers.ModelSerializer):
         """Validate status transitions."""
         current = self.instance.status
 
+        S = Order.Status
         valid_transitions = {
-            Order.Status.PENDING: [Order.Status.PREPARING, Order.Status.CANCELLED],
-            Order.Status.PREPARING: [Order.Status.COMPLETED, Order.Status.CANCELLED],
-            Order.Status.COMPLETED: [],
-            Order.Status.CANCELLED: [],
+            S.PENDING: [S.PREPARING, S.CANCELLED],
+            S.PREPARING: [S.READY, S.COMPLETED, S.CANCELLED],
+            S.READY: [S.SERVED, S.COMPLETED, S.CANCELLED],
+            S.SERVED: [S.COMPLETED],
+            S.COMPLETED: [],
+            S.CANCELLED: [],
         }
+        if value == S.PREPARING and self.instance.confirmed_at is None:
+            raise serializers.ValidationError(
+                "Confirm this QR order before the kitchen starts it."
+            )
 
         allowed = valid_transitions.get(current, [])
         if value not in allowed:

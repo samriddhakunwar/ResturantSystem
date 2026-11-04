@@ -27,11 +27,6 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 # ──────────────────────────────────────────────
-# CORS — restrict in production
-# ──────────────────────────────────────────────
-CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")
-
-# ──────────────────────────────────────────────
 # Disable Browsable API in production
 # ──────────────────────────────────────────────
 REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [  # noqa: F405

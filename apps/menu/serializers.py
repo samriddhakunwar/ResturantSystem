@@ -3,7 +3,14 @@ Serializers for the Menu Management module.
 """
 from rest_framework import serializers
 
-from .models import Category, MenuItem
+from .models import DIETARY_TAGS, Category, MenuItem
+
+
+def validate_dietary_tags(value):
+    """Only the known dietary tags, no duplicates."""
+    if not isinstance(value, list) or any(tag not in DIETARY_TAGS for tag in value):
+        raise serializers.ValidationError(f"Allowed tags: {', '.join(DIETARY_TAGS)}.")
+    return list(dict.fromkeys(value))
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -42,6 +49,9 @@ class MenuItemListSerializer(serializers.ModelSerializer):
             "category_name",
             "display_order",
             "image",
+            "dietary_tags",
+            "is_featured",
+            "recommended_by",
         ]
 
 
@@ -62,10 +72,21 @@ class MenuItemSerializer(serializers.ModelSerializer):
             "image",
             "is_available",
             "display_order",
+            "dietary_tags",
+            "is_featured",
+            "recommended_by",
+            "recommended_by_name",
             "created_at",
             "updated_at",
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
+
+    recommended_by_name = serializers.CharField(
+        source="recommended_by.name", read_only=True, default=None
+    )
+
+    def validate_dietary_tags(self, value):
+        return validate_dietary_tags(value)
 
     def validate_price(self, value):
         """Ensure price is positive."""
