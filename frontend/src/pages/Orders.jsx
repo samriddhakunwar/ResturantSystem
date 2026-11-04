@@ -6,6 +6,7 @@ import OrderCard from '../components/orders/OrderCard';
 import Button from '../components/ui/Button';
 import { usePOS } from '../context/PosContext';
 import { PlusCircle, RefreshCw } from 'lucide-react';
+import CatSilhouette from '../components/decor/CatSilhouette';
 
 const TABS = ['All', 'Pending', 'Preparing', 'Completed', 'Cancelled'];
 
@@ -37,7 +38,7 @@ export default function Orders() {
     Preparing: 'text-blue-600 bg-blue-50',
     Completed: 'text-green-600 bg-green-50',
     Cancelled: 'text-gray-500 bg-gray-100',
-    All:       'text-orange-600 bg-orange-50',
+    All:       'text-olive-strong bg-olive-soft',
   };
 
   return (
@@ -46,8 +47,9 @@ export default function Orders() {
         title="Active Orders"
         subtitle={`${orders.filter((o) => o.status !== 'Completed').length} orders in progress`}
         action={
-          <Button icon={<PlusCircle className="w-4 h-4" />}>
-            New Order
+          <Button to="/new-order">
+            <PlusCircle size={18} aria-hidden="true" />
+            New order
           </Button>
         }
       />
@@ -67,7 +69,7 @@ export default function Orders() {
                   flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold whitespace-nowrap
                   transition-all duration-150
                   ${isActive
-                    ? 'bg-orange-500 text-white shadow-sm'
+                    ? 'bg-olive-strong text-white shadow-sm'
                     : 'text-gray-600 hover:bg-gray-50'
                   }
                 `}
@@ -100,7 +102,7 @@ export default function Orders() {
       {/* Orders Grid */}
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <span className="text-5xl mb-3">🍕</span>
+          <CatSilhouette pose="lying" className="mb-3 h-14 w-auto" />
           <p className="text-gray-500 font-medium">No orders found</p>
           <p className="text-gray-400 text-sm mt-1">Try a different filter or search term</p>
         </div>

@@ -3,16 +3,17 @@ import { useState } from 'react';
 import { Printer, CreditCard, Banknote, Smartphone } from 'lucide-react';
 import StatusBadge from '../ui/StatusBadge';
 import { usePOS } from '../../context/PosContext';
+import Doodle from '../decor/Doodle';
 
 export default function InvoiceCard({ invoice }) {
-  const { updatePaymentStatus, printBill } = usePOS();
+  const { updatePaymentStatus, printBill, settings } = usePOS();
   const [printing, setPrinting] = useState(false);
 
   const handlePrint = async () => {
     setPrinting(true);
     const res = await printBill(invoice?.orderId);
     setPrinting(false);
-    if (!res.ok) alert(`🖨️ ${res.message}`);
+    if (!res.ok) alert(res.message);
   };
 
   const paymentMethods = [
@@ -24,7 +25,7 @@ export default function InvoiceCard({ invoice }) {
   if (!invoice) {
     return (
       <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-white rounded-2xl border border-gray-100 shadow-sm text-center p-6">
-        <span className="text-5xl mb-3">🧾</span>
+        <Doodle name="dot" className="w-8 mb-3" />
         <p className="text-gray-500 font-semibold">Select an order</p>
         <p className="text-sm text-gray-400 mt-1">Click an order on the left to preview the invoice</p>
       </div>
@@ -34,17 +35,16 @@ export default function InvoiceCard({ invoice }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       {/* Invoice Header */}
-      <div className="bg-gradient-to-br from-orange-500 to-orange-600 px-6 py-5 text-white">
+      <div className="bg-olive-dark px-6 py-5 text-white">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">🍕</div>
           <div>
-            <p className="font-bold text-lg leading-tight">Wow Pizza Hub</p>
-            <p className="text-orange-100 text-xs">Thamel, Kathmandu</p>
+            <p className="font-display text-lg font-extrabold leading-tight">{settings.restaurant.name}</p>
+            <p className="text-olive-soft text-xs">{settings.restaurant.address}</p>
           </div>
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-orange-100 text-xs">Invoice</p>
+            <p className="text-olive-soft text-xs">Invoice</p>
             <p className="font-bold text-xl">{invoice.id}</p>
           </div>
           <StatusBadge status={invoice.paymentStatus} />
@@ -109,7 +109,7 @@ export default function InvoiceCard({ invoice }) {
         </div>
         <div className="flex justify-between text-base font-bold text-gray-900 pt-2 border-t border-gray-100">
           <span>Grand Total</span>
-          <span className="text-orange-500 text-lg">Rs {invoice.total.toFixed(2)}</span>
+          <span className="text-olive-strong text-lg">Rs {invoice.total.toFixed(2)}</span>
         </div>
       </div>
 
@@ -150,8 +150,8 @@ export default function InvoiceCard({ invoice }) {
 
       {/* Footer */}
       <div className="px-5 pb-4 text-center text-xs text-gray-400 border-t border-gray-100 pt-3">
-        <p>Thank you for choosing Wow Pizza Hub! 🍕</p>
-        <p className="mt-0.5">www.wowpizzahub.com</p>
+        <p>{settings.receipt.thankYouMessage}</p>
+        <p className="mt-0.5">{settings.receipt.footerNote}</p>
       </div>
     </div>
   );

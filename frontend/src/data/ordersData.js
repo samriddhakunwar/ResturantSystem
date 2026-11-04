@@ -1,119 +1,43 @@
 // ─── Orders Mock Data ─────────────────────────────────────────────────────────
+// Offline-demo orders. Amounts are item subtotals in NPR (VAT and service
+// charge are added on the bill).
+
+const order = (n, customer, table, status, paymentStatus, time, items, extra = {}) => ({
+  id: `ORD-${String(n).padStart(6, '0')}`,
+  backendId: null,
+  customer,
+  table,
+  status,
+  paymentStatus,
+  paymentMethod: paymentStatus === 'Paid' ? 'Cash' : null,
+  amount: items.reduce((sum, i) => sum + i.qty * i.price, 0),
+  time,
+  notes: '',
+  source: 'pos',
+  confirmed: true,
+  items,
+  ...extra,
+});
 
 export const ordersData = [
-  {
-    id: '#ORD-1024',
-    customer: 'Aarav Sharma',
-    table: 'Table 4',
-    status: 'Completed',
-    paymentStatus: 'Paid',
-    amount: 42.50,
-    time: '09:05 AM',
-    items: [
-      { name: 'Margherita Pizza', qty: 1, price: 15.00 },
-      { name: 'Garlic Bread', qty: 2, price: 4.00 },
-      { name: 'Pepsi (Large)', qty: 2, price: 3.00 },
-      { name: 'Chocolate Lava Cake', qty: 1, price: 8.50 },
-    ],
-  },
-  {
-    id: '#ORD-1023',
-    customer: 'Priya Thapa',
-    table: 'Table 2',
-    status: 'Preparing',
-    paymentStatus: 'Unpaid',
-    amount: 28.00,
-    time: '09:08 AM',
-    items: [
-      { name: 'BBQ Chicken Pizza', qty: 1, price: 18.00 },
-      { name: 'Coleslaw', qty: 1, price: 4.00 },
-      { name: 'Lemonade', qty: 2, price: 3.00 },
-    ],
-  },
-  {
-    id: '#ORD-1022',
-    customer: 'Rohan Khatri',
-    table: 'Takeaway',
-    status: 'Pending',
-    paymentStatus: 'Unpaid',
-    amount: 56.75,
-    time: '09:12 AM',
-    items: [
-      { name: 'Veggie Supreme', qty: 2, price: 13.00 },
-      { name: 'BBQ Chicken Pizza', qty: 1, price: 18.00 },
-      { name: 'Garlic Bread', qty: 3, price: 4.00 },
-      { name: 'Tiramisu', qty: 1, price: 7.00 },
-    ],
-  },
-  {
-    id: '#ORD-1021',
-    customer: 'Sneha Patel',
-    table: 'Table 7',
-    status: 'Ready',
-    paymentStatus: 'Paid',
-    amount: 19.90,
-    time: '09:14 AM',
-    items: [
-      { name: 'Cheese Pizza (Small)', qty: 1, price: 10.00 },
-      { name: 'Pepsi (Large)', qty: 1, price: 3.00 },
-      { name: 'Garlic Bread', qty: 1, price: 4.00 },
-    ],
-  },
-  {
-    id: '#ORD-1020',
-    customer: 'Vikram Singh',
-    table: 'Table 1',
-    status: 'Completed',
-    paymentStatus: 'Paid',
-    amount: 63.20,
-    time: '08:55 AM',
-    items: [
-      { name: 'BBQ Chicken Pizza', qty: 2, price: 18.00 },
-      { name: 'Margherita Pizza', qty: 1, price: 15.00 },
-      { name: 'Cheesy Dips', qty: 2, price: 3.00 },
-      { name: 'Pepsi (Large)', qty: 2, price: 3.00 },
-    ],
-  },
-  {
-    id: '#ORD-1019',
-    customer: 'Anita Rai',
-    table: 'Table 3',
-    status: 'Completed',
-    paymentStatus: 'Paid',
-    amount: 34.50,
-    time: '08:48 AM',
-    items: [
-      { name: 'Veggie Supreme', qty: 1, price: 13.00 },
-      { name: 'Garlic Bread', qty: 2, price: 4.00 },
-      { name: 'Mango Lassi', qty: 2, price: 4.50 },
-    ],
-  },
-  {
-    id: '#ORD-1018',
-    customer: 'Dev Maharjan',
-    table: 'Table 5',
-    status: 'Preparing',
-    paymentStatus: 'Unpaid',
-    amount: 47.00,
-    time: '08:40 AM',
-    items: [
-      { name: 'BBQ Chicken Pizza', qty: 1, price: 18.00 },
-      { name: 'Margherita Pizza', qty: 1, price: 15.00 },
-      { name: 'Chocolate Lava Cake', qty: 1, price: 8.50 },
-      { name: 'Pepsi (Large)', qty: 1, price: 3.00 },
-    ],
-  },
-  {
-    id: '#ORD-1017',
-    customer: 'Sita Gurung',
-    table: 'Takeaway',
-    status: 'Pending',
-    paymentStatus: 'Unpaid',
-    amount: 22.00,
-    time: '08:35 AM',
-    items: [
-      { name: 'Cheese Pizza (Small)', qty: 2, price: 10.00 },
-      { name: 'Garlic Bread', qty: 1, price: 4.00 },
-    ],
-  },
+  order(1024, 'Aarav Sharma', 'Table 4', 'Completed', 'Paid', '09:05 AM', [
+    { name: 'Catpuccino', qty: 2, price: 280 },
+    { name: 'Whisker Waffles', qty: 1, price: 380 },
+  ]),
+  order(1025, 'Walk-in Customer', 'Table 2', 'Preparing', 'Unpaid', '09:18 AM', [
+    { name: 'Purrfect Masala Chiya', qty: 2, price: 120 },
+    { name: 'Kitten Mitten Cookies', qty: 1, price: 180 },
+  ]),
+  order(1026, 'Walk-in Customer', 'Table 6', 'Ready', 'Unpaid', '09:24 AM', [
+    { name: 'Tuna Melt Paws', qty: 1, price: 450 },
+    { name: 'Iced Catpuccino', qty: 1, price: 300 },
+  ]),
+  order(1027, 'Guest', 'Table 3', 'Pending', 'Unpaid', '09:31 AM', [
+    { name: 'Meow-cha Latte', qty: 1, price: 320 },
+    { name: 'Paw-ffle Fries', qty: 1, price: 250 },
+  ], { source: 'qr', confirmed: false, notes: 'Less sugar, please' }),
+  order(1028, 'Walk-in Customer', 'Table 8', 'Served', 'Unpaid', '09:40 AM', [
+    { name: 'Chicken Momo Meow-dley', qty: 2, price: 360 },
+    { name: 'Mango Lassi Leap', qty: 2, price: 260 },
+  ]),
 ];

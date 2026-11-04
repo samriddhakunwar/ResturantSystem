@@ -48,12 +48,12 @@ export default function Navbar() {
           {/* Notification bell */}
           <button className="relative p-2 rounded-xl hover:bg-gray-100 text-gray-500 transition-colors">
             <Bell className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-orange-500 rounded-full" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-olive-strong rounded-full" />
           </button>
 
           {/* Admin avatar */}
           <button className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl hover:bg-gray-100 transition-colors">
-            <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">
+            <div className="w-8 h-8 bg-olive-dark rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">
               A
             </div>
             <span className="hidden sm:block text-sm font-semibold text-gray-800">Admin</span>

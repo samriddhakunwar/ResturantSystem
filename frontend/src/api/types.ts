@@ -32,12 +32,22 @@ export interface ApiMenuItem {
   image: string | null;
   is_available: boolean;
   display_order: number;
+  dietary_tags?: string[];
+  is_featured?: boolean;
+  recommended_by?: number | null;
+  recommended_by_name?: string | null;
   created_at?: string;
   updated_at?: string;
 }
 
 // ── Orders ──────────────────────────────────────────────────────────────────
-export type ApiOrderStatus = 'pending' | 'preparing' | 'completed' | 'cancelled';
+export type ApiOrderStatus =
+  | 'pending'
+  | 'preparing'
+  | 'ready'
+  | 'served'
+  | 'completed'
+  | 'cancelled';
 
 export interface ApiOrderItem {
   id?: number;
@@ -52,8 +62,12 @@ export interface ApiOrderItem {
 export interface ApiOrder {
   id: number;
   order_number: string;
+  public_id?: string;
   status: ApiOrderStatus;
+  source?: 'pos' | 'qr';
+  table?: number | null;
   table_number: number | null;
+  confirmed_at?: string | null;
   notes: string;
   subtotal: string;
   total: string;

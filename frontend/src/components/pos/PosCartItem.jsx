@@ -1,6 +1,7 @@
 // ─── POS Cart Item Row ────────────────────────────────────────────────────────
 import { Trash2, Plus, Minus } from 'lucide-react';
 import { usePOS } from '../../context/PosContext';
+import ItemThumb from '../ui/ItemThumb';
 
 export default function PosCartItem({ item }) {
   const { incrementQty, decrementQty, removeFromCart } = usePOS();
@@ -8,18 +9,8 @@ export default function PosCartItem({ item }) {
 
   return (
     <div className="flex items-center gap-2.5 py-3 border-b border-gray-50 last:border-0 group animate-[fadeIn_0.2s_ease]">
-      {/* Emoji / image thumbnail */}
-      <div className="w-10 h-10 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center shrink-0">
-        <img
-          src={item.image}
-          alt={item.name}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.parentElement.innerHTML = `<span class="text-xl">${item.emoji}</span>`;
-          }}
-        />
-      </div>
+      {/* Photo or category doodle */}
+      <ItemThumb item={item} className="h-10 w-10" />
 
       {/* Name + price */}
       <div className="flex-1 min-w-0">
@@ -31,14 +22,14 @@ export default function PosCartItem({ item }) {
       <div className="flex items-center gap-1 shrink-0">
         <button
           onClick={() => decrementQty(item.id)}
-          className="w-6 h-6 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-orange-100 hover:text-orange-600 transition-colors active:scale-95"
+          className="w-6 h-6 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-olive-soft hover:text-olive-dark transition-colors active:scale-95"
         >
           <Minus size={10} strokeWidth={3} />
         </button>
         <span className="w-6 text-center text-sm font-bold text-gray-800">{item.qty}</span>
         <button
           onClick={() => incrementQty(item.id)}
-          className="w-6 h-6 rounded-lg bg-orange-500 text-white flex items-center justify-center hover:bg-orange-600 transition-colors active:scale-95"
+          className="w-6 h-6 rounded-lg bg-olive-strong text-white flex items-center justify-center hover:bg-olive-dark transition-colors active:scale-95"
         >
           <Plus size={10} strokeWidth={3} />
         </button>

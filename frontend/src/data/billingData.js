@@ -1,107 +1,31 @@
 // ─── Billing Mock Data ────────────────────────────────────────────────────────
+// Offline-demo invoices built from the mock orders with the backend's formula:
+// 10% service charge on the subtotal, then 13% VAT on (subtotal + service).
+import { ordersData } from './ordersData';
 
-export const billingOrders = [
-  {
-    id: '#INV-1024',
-    orderId: '#ORD-1024',
-    customer: 'Aarav Sharma',
-    phone: '+977-9841-234567',
-    table: 'Table 4',
-    date: '2026-06-09',
-    time: '09:05 AM',
-    paymentStatus: 'Paid',
-    paymentMethod: 'Card',
-    items: [
-      { name: 'Margherita Pizza', qty: 1, price: 15.00 },
-      { name: 'Garlic Bread', qty: 2, price: 4.00 },
-      { name: 'Pepsi (Large)', qty: 2, price: 3.00 },
-      { name: 'Chocolate Lava Cake', qty: 1, price: 8.50 },
-    ],
-    subtotal: 42.50,
-    taxRate: 0.13,
-    tax: 5.53,
-    total: 48.03,
-  },
-  {
-    id: '#INV-1023',
-    orderId: '#ORD-1023',
-    customer: 'Priya Thapa',
-    phone: '+977-9801-345678',
-    table: 'Table 2',
-    date: '2026-06-09',
-    time: '09:08 AM',
-    paymentStatus: 'Unpaid',
-    paymentMethod: null,
-    items: [
-      { name: 'BBQ Chicken Pizza', qty: 1, price: 18.00 },
-      { name: 'Coleslaw', qty: 1, price: 4.00 },
-      { name: 'Lemonade', qty: 2, price: 3.00 },
-    ],
-    subtotal: 28.00,
-    taxRate: 0.13,
-    tax: 3.64,
-    total: 31.64,
-  },
-  {
-    id: '#INV-1022',
-    orderId: '#ORD-1022',
-    customer: 'Rohan Khatri',
-    phone: '+977-9851-456789',
-    table: 'Takeaway',
-    date: '2026-06-09',
-    time: '09:12 AM',
-    paymentStatus: 'Unpaid',
-    paymentMethod: null,
-    items: [
-      { name: 'Veggie Supreme', qty: 2, price: 13.00 },
-      { name: 'BBQ Chicken Pizza', qty: 1, price: 18.00 },
-      { name: 'Garlic Bread', qty: 3, price: 4.00 },
-      { name: 'Tiramisu', qty: 1, price: 7.00 },
-    ],
-    subtotal: 56.75,
-    taxRate: 0.13,
-    tax: 7.38,
-    total: 64.13,
-  },
-  {
-    id: '#INV-1021',
-    orderId: '#ORD-1021',
-    customer: 'Sneha Patel',
-    phone: '+977-9861-567890',
-    table: 'Table 7',
-    date: '2026-06-09',
-    time: '09:14 AM',
-    paymentStatus: 'Paid',
-    paymentMethod: 'Cash',
-    items: [
-      { name: 'Cheese Pizza (Small)', qty: 1, price: 10.00 },
-      { name: 'Pepsi (Large)', qty: 1, price: 3.00 },
-      { name: 'Garlic Bread', qty: 1, price: 4.00 },
-    ],
-    subtotal: 19.90,
-    taxRate: 0.13,
-    tax: 2.59,
-    total: 22.49,
-  },
-  {
-    id: '#INV-1020',
-    orderId: '#ORD-1020',
-    customer: 'Vikram Singh',
-    phone: '+977-9821-678901',
-    table: 'Table 1',
-    date: '2026-06-09',
-    time: '08:55 AM',
-    paymentStatus: 'Paid',
-    paymentMethod: 'Online',
-    items: [
-      { name: 'BBQ Chicken Pizza', qty: 2, price: 18.00 },
-      { name: 'Margherita Pizza', qty: 1, price: 15.00 },
-      { name: 'Cheesy Dips', qty: 2, price: 3.00 },
-      { name: 'Pepsi (Large)', qty: 2, price: 3.00 },
-    ],
-    subtotal: 63.20,
-    taxRate: 0.13,
-    tax: 8.22,
-    total: 71.42,
-  },
-];
+const round2 = (n) => Math.round(n * 100) / 100;
+
+export const billingOrders = ordersData
+  .filter((o) => ['Completed', 'Served'].includes(o.status))
+  .map((o, i) => {
+    const subtotal = o.amount;
+    const serviceCharge = round2(subtotal * 0.1);
+    const tax = round2((subtotal + serviceCharge) * 0.13);
+    return {
+      id: `BILL-${String(1001 + i).padStart(6, '0')}`,
+      billId: null,
+      orderId: o.id,
+      customer: o.customer,
+      table: o.table,
+      date: new Date().toLocaleDateString('en-CA'),
+      time: o.time,
+      paymentStatus: o.paymentStatus,
+      paymentMethod: o.paymentMethod,
+      items: o.items,
+      subtotal,
+      serviceCharge,
+      taxRate: 0.13,
+      tax,
+      total: round2(subtotal + serviceCharge + tax),
+    };
+  });

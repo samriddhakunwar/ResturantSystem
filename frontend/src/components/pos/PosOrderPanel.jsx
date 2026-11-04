@@ -1,5 +1,5 @@
 // ─── POS Order Panel (Cart + Billing tabs) ────────────────────────────────────
-import { ShoppingCart, CreditCard, Banknote, Smartphone, Printer, CheckCircle2, Trash2, FileText, ChevronRight } from 'lucide-react';
+import { ShoppingCart, CreditCard, Banknote, Smartphone, Printer, CheckCircle2, Trash2, FileText, ChevronRight, User, Armchair, NotebookPen } from 'lucide-react';
 import { usePOS } from '../../context/PosContext';
 import PosCartItem from './PosCartItem';
 
@@ -34,12 +34,12 @@ export default function PosOrderPanel({ className = '' }) {
               key={id}
               onClick={() => setActiveTab(id)}
               className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150
-                ${activeTab === id ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                ${activeTab === id ? 'bg-olive-strong text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
             >
               <Icon size={13} />
               {label}
               {id === 'cart' && cartCount > 0 && (
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === id ? 'bg-white/20' : 'bg-orange-100 text-orange-600'}`}>
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === id ? 'bg-white/20' : 'bg-olive-soft text-olive-strong'}`}>
                   {cartCount}
                 </span>
               )}
@@ -62,9 +62,9 @@ export default function PosOrderPanel({ className = '' }) {
         <>
           {/* Order info summary bar */}
           {(cartCustomer || cartTable) && (
-            <div className="px-4 py-2 bg-orange-50 border-b border-orange-100 flex items-center gap-3 text-xs shrink-0">
-              {cartCustomer && <span className="font-semibold text-orange-700 flex items-center gap-1">👤 {cartCustomer}</span>}
-              {cartTable    && <span className="font-semibold text-orange-700 flex items-center gap-1">🪑 {cartTable}</span>}
+            <div className="px-4 py-2 bg-olive-soft border-b border-olive flex items-center gap-3 text-xs shrink-0">
+              {cartCustomer && <span className="font-semibold text-olive-strong flex items-center gap-1"><User size={12} aria-hidden="true" /> {cartCustomer}</span>}
+              {cartTable    && <span className="font-semibold text-olive-strong flex items-center gap-1"><Armchair size={12} aria-hidden="true" /> {cartTable}</span>}
             </div>
           )}
 
@@ -72,8 +72,8 @@ export default function PosOrderPanel({ className = '' }) {
           <div className="flex-1 overflow-y-auto px-4 min-h-0">
             {isEmpty ? (
               <div className="flex flex-col items-center justify-center h-full py-10 text-center">
-                <div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-3">
-                  <ShoppingCart className="w-7 h-7 text-orange-300" />
+                <div className="w-16 h-16 bg-olive-soft rounded-2xl flex items-center justify-center mb-3">
+                  <ShoppingCart className="w-7 h-7 text-olive-soft" />
                 </div>
                 <p className="text-sm font-semibold text-gray-500">Cart is empty</p>
                 <p className="text-xs text-gray-400 mt-1">Tap menu items to add them</p>
@@ -90,7 +90,7 @@ export default function PosOrderPanel({ className = '' }) {
           {/* Notes preview */}
           {cartNotes && (
             <div className="mx-4 mb-2 px-3 py-2 bg-yellow-50 border border-yellow-100 rounded-xl text-xs text-yellow-700">
-              📝 {cartNotes}
+              <NotebookPen size={12} aria-hidden="true" className="inline" /> {cartNotes}
             </div>
           )}
 
@@ -107,7 +107,7 @@ export default function PosOrderPanel({ className = '' }) {
               </div>
               <div className="flex justify-between items-center mt-2 pt-2 border-t border-dashed border-gray-200">
                 <span className="text-sm font-bold text-gray-900">Total</span>
-                <span className="text-xl font-black text-orange-500">Rs {cartTotal.toFixed(2)}</span>
+                <span className="text-xl font-black text-olive-strong">Rs {cartTotal.toFixed(2)}</span>
               </div>
             </div>
           )}
@@ -117,7 +117,7 @@ export default function PosOrderPanel({ className = '' }) {
             <div className="px-4 pb-4 shrink-0">
               <button
                 onClick={() => setActiveTab('billing')}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm rounded-xl transition-colors shadow-sm shadow-orange-200 active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-olive-strong hover:bg-olive-dark text-white font-semibold text-sm rounded-xl transition-colors shadow-sm active:scale-[0.98]"
               >
                 Proceed to Payment
                 <ChevronRight size={16} />
@@ -161,7 +161,7 @@ export default function PosOrderPanel({ className = '' }) {
             </div>
 
             {/* Bill totals */}
-            <div className="bg-orange-50 rounded-xl p-3.5 space-y-1.5">
+            <div className="bg-olive-soft rounded-xl p-3.5 space-y-1.5">
               <div className="flex justify-between text-xs text-gray-600">
                 <span>Subtotal</span>
                 <span className="font-semibold">Rs {cartSubtotal.toFixed(2)}</span>
@@ -170,9 +170,9 @@ export default function PosOrderPanel({ className = '' }) {
                 <span>Tax ({(cartTaxRate * 100).toFixed(0)}% VAT)</span>
                 <span className="font-semibold">Rs {cartTax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between items-center pt-2 border-t border-orange-100 mt-1">
+              <div className="flex justify-between items-center pt-2 border-t border-olive mt-1">
                 <span className="text-sm font-bold text-gray-900">Grand Total</span>
-                <span className="text-2xl font-black text-orange-500">Rs {cartTotal.toFixed(2)}</span>
+                <span className="text-2xl font-black text-olive-strong">Rs {cartTotal.toFixed(2)}</span>
               </div>
             </div>
 
@@ -211,8 +211,8 @@ export default function PosOrderPanel({ className = '' }) {
                     onClick={() => setCartPayMethod(id)}
                     className={`flex flex-col items-center gap-1 py-2.5 rounded-xl border-2 text-xs font-semibold transition-all duration-150 active:scale-95
                       ${cartPayMethod === id
-                        ? 'border-orange-500 bg-orange-50 text-orange-600'
-                        : 'border-gray-200 text-gray-500 hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50'
+                        ? 'border-olive-strong bg-olive-soft text-olive-strong'
+                        : 'border-gray-200 text-gray-500 hover:border-olive-strong hover:text-olive-dark hover:bg-olive-soft'
                       }`}
                   >
                     <Icon size={16} />
@@ -226,15 +226,15 @@ export default function PosOrderPanel({ className = '' }) {
           {/* Action buttons */}
           <div className="border-t border-gray-100 px-4 py-3 space-y-2 shrink-0">
             <div className="grid grid-cols-3 gap-2">
-              <button className="flex flex-col items-center gap-1 py-2 rounded-xl border border-gray-200 text-[11px] font-semibold text-gray-600 hover:border-orange-300 hover:text-orange-600 hover:bg-orange-50 transition-colors active:scale-95">
+              <button className="flex flex-col items-center gap-1 py-2 rounded-xl border border-gray-200 text-[11px] font-semibold text-gray-600 hover:border-olive-strong hover:text-olive-dark hover:bg-olive-soft transition-colors active:scale-95">
                 <FileText size={14} />
                 Save Bill
               </button>
-              <button className="flex flex-col items-center gap-1 py-2 rounded-xl border border-gray-200 text-[11px] font-semibold text-gray-600 hover:border-orange-300 hover:text-orange-600 hover:bg-orange-50 transition-colors active:scale-95">
+              <button className="flex flex-col items-center gap-1 py-2 rounded-xl border border-gray-200 text-[11px] font-semibold text-gray-600 hover:border-olive-strong hover:text-olive-dark hover:bg-olive-soft transition-colors active:scale-95">
                 <Printer size={14} />
                 Print Bill
               </button>
-              <button className="flex flex-col items-center gap-1 py-2 rounded-xl border border-gray-200 text-[11px] font-semibold text-gray-600 hover:border-orange-300 hover:text-orange-600 hover:bg-orange-50 transition-colors active:scale-95">
+              <button className="flex flex-col items-center gap-1 py-2 rounded-xl border border-gray-200 text-[11px] font-semibold text-gray-600 hover:border-olive-strong hover:text-olive-dark hover:bg-olive-soft transition-colors active:scale-95">
                 <Printer size={14} />
                 Print KOT
               </button>
@@ -242,7 +242,7 @@ export default function PosOrderPanel({ className = '' }) {
             <button
               onClick={completeOrder}
               disabled={isEmpty}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-200 disabled:text-gray-400 text-white font-bold text-sm rounded-xl transition-all shadow-sm shadow-orange-200 active:scale-[0.98] disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-olive-strong hover:bg-olive-dark disabled:bg-gray-200 disabled:text-gray-400 text-white font-bold text-sm rounded-xl transition-all shadow-sm active:scale-[0.98] disabled:cursor-not-allowed"
             >
               <CheckCircle2 size={17} />
               Complete Order · Rs {cartTotal.toFixed(2)}

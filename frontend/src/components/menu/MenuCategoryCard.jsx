@@ -2,11 +2,12 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 import MenuItemRow from './MenuItemRow';
-import { CATEGORY_META } from '../../data/menuManagementData';
+import { doodleFor } from '../../data/menuManagementData';
+import Doodle from '../decor/Doodle';
 
 export default function MenuCategoryCard({ category, items }) {
   const [collapsed, setCollapsed] = useState(false);
-  const meta = CATEGORY_META[category] || { emoji: '🍽️', bg: 'bg-gray-50', text: 'text-gray-600', border: 'border-gray-200', dot: 'bg-gray-400' };
+  const meta = { bg: 'bg-olive-soft', text: 'text-olive-dark' };
 
   const activeCount = items.filter((i) => i.available).length;
 
@@ -18,8 +19,8 @@ export default function MenuCategoryCard({ category, items }) {
         className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-50/70 transition-colors group"
       >
         {/* Emoji + name */}
-        <span className={`w-9 h-9 rounded-xl flex items-center justify-center text-xl shrink-0 ${meta.bg}`}>
-          {meta.emoji}
+        <span className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${meta.bg}`}>
+          <Doodle name={doodleFor(category)} className="h-6 w-6" />
         </span>
         <div className="flex-1 text-left">
           <p className={`text-sm font-bold ${meta.text}`}>{category}</p>
@@ -57,7 +58,7 @@ export default function MenuCategoryCard({ category, items }) {
           <div className="px-4 pb-4 space-y-1.5">
             {items.length === 0 ? (
               <div className="text-center py-8 text-gray-400">
-                <p className="text-3xl mb-2">{meta.emoji}</p>
+                <Doodle name={doodleFor(category)} className="mx-auto mb-2 h-8 w-8" />
                 <p className="text-sm font-medium">No items in this category</p>
               </div>
             ) : (

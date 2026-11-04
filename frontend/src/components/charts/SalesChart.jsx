@@ -9,7 +9,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return (
     <div className="bg-white border border-gray-100 rounded-xl shadow-lg p-3">
       <p className="text-xs font-semibold text-gray-600 mb-1">{label}</p>
-      <p className="text-sm font-bold text-orange-500">
+      <p className="text-sm font-bold text-olive-strong">
         ${payload[0]?.value?.toLocaleString()}
       </p>
     </div>

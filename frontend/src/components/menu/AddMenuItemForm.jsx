@@ -2,17 +2,15 @@
 import { useState } from 'react';
 import { Plus, ImagePlus, X, CheckCircle2 } from 'lucide-react';
 import { usePOS } from '../../context/PosContext';
-import { MENU_CATEGORIES, CATEGORY_META } from '../../data/menuManagementData';
-
-const EMOJI_MAP = {
-  Pizza: '🍕', Sides: '🍟', Drinks: '🥤', Desserts: '🍫',
-};
+import { MENU_CATEGORIES, doodleFor } from '../../data/menuManagementData';
+import Doodle from '../decor/Doodle';
+import ItemThumb from '../ui/ItemThumb';
 
 const EMPTY_FORM = {
   name: '',
   description: '',
   price: '',
-  category: 'Pizza',
+  category: MENU_CATEGORIES[0],
   image: '',
 };
 
@@ -47,7 +45,6 @@ export default function AddMenuItemForm() {
       price: Number(form.price),
       category: form.category,
       image: form.image.trim() || '',
-      emoji: EMOJI_MAP[form.category] || '🍽️',
       available: true,
     });
 
@@ -57,14 +54,13 @@ export default function AddMenuItemForm() {
     setTimeout(() => setSuccess(false), 2000);
   };
 
-  const meta = CATEGORY_META[form.category] || {};
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       {/* Header */}
       <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
-        <div className="w-9 h-9 bg-orange-50 rounded-xl flex items-center justify-center">
-          <Plus className="w-5 h-5 text-orange-500" />
+        <div className="w-9 h-9 bg-olive-soft rounded-xl flex items-center justify-center">
+          <Plus className="w-5 h-5 text-olive-strong" />
         </div>
         <div>
           <p className="text-sm font-bold text-gray-900">Add New Item</p>
@@ -80,11 +76,11 @@ export default function AddMenuItemForm() {
           </label>
           <input
             type="text"
-            placeholder="e.g. Veggie Pizza"
+            placeholder="e.g. Catpuccino"
             value={form.name}
             onChange={(e) => set('name', e.target.value)}
             className={`w-full px-3.5 py-2.5 text-sm bg-gray-50 border rounded-xl outline-none transition-all
-              focus:bg-white focus:ring-2 focus:ring-orange-100 focus:border-orange-400 placeholder:text-gray-400
+              focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400
               ${errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
           />
           {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
@@ -101,7 +97,7 @@ export default function AddMenuItemForm() {
             value={form.description}
             onChange={(e) => set('description', e.target.value)}
             className="w-full px-3.5 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none resize-none
-              focus:bg-white focus:ring-2 focus:ring-orange-100 focus:border-orange-400 placeholder:text-gray-400 transition-all"
+              focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400 transition-all"
           />
         </div>
 
@@ -120,7 +116,7 @@ export default function AddMenuItemForm() {
               value={form.price}
               onChange={(e) => set('price', e.target.value)}
               className={`w-full pl-9 pr-3.5 py-2.5 text-sm font-semibold bg-gray-50 border rounded-xl outline-none transition-all
-                focus:bg-white focus:ring-2 focus:ring-orange-100 focus:border-orange-400 placeholder:text-gray-400
+                focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400
                 ${errors.price ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
             />
           </div>
@@ -134,7 +130,6 @@ export default function AddMenuItemForm() {
           </label>
           <div className="grid grid-cols-2 gap-2">
             {MENU_CATEGORIES.map((cat) => {
-              const m = CATEGORY_META[cat];
               const isActive = form.category === cat;
               return (
                 <button
@@ -143,11 +138,11 @@ export default function AddMenuItemForm() {
                   onClick={() => set('category', cat)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all duration-150 active:scale-95
                     ${isActive
-                      ? 'border-orange-500 bg-orange-50 text-orange-700'
-                      : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-orange-200 hover:bg-orange-50/50'
+                      ? 'border-olive-strong bg-olive-soft text-olive-strong'
+                      : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-olive-strong hover:bg-olive-soft'
                     }`}
                 >
-                  <span className="text-base">{m.emoji}</span>
+                  <Doodle name={doodleFor(cat)} className="h-4 w-4" />
                   {cat}
                 </button>
               );
@@ -169,7 +164,7 @@ export default function AddMenuItemForm() {
               value={form.image}
               onChange={(e) => set('image', e.target.value)}
               className="w-full pl-9 pr-9 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none
-                focus:bg-white focus:ring-2 focus:ring-orange-100 focus:border-orange-400 placeholder:text-gray-400 transition-all"
+                focus:bg-white focus:ring-2 focus:ring-olive-soft focus:border-olive-strong placeholder:text-gray-400 transition-all"
             />
             {form.image && (
               <button
@@ -197,19 +192,14 @@ export default function AddMenuItemForm() {
 
         {/* Preview card */}
         {form.name && (
-          <div className={`rounded-xl border-2 p-3 flex items-center gap-3 transition-all ${meta.border || 'border-gray-200'} ${meta.bg || 'bg-gray-50'}`}>
-            <div className="w-10 h-10 rounded-lg overflow-hidden bg-white flex items-center justify-center shrink-0">
-              {form.image
-                ? <img src={form.image} alt="" className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML = `<span class='text-xl'>${EMOJI_MAP[form.category]}</span>`; }} />
-                : <span className="text-xl">{EMOJI_MAP[form.category]}</span>
-              }
-            </div>
+          <div className="rounded-xl border-2 p-3 flex items-center gap-3 transition-all border-olive bg-olive-soft">
+            <ItemThumb item={{ image: form.image, category: form.category }} className="w-10 h-10" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-gray-900 truncate">{form.name}</p>
               <p className="text-xs text-gray-500 truncate">{form.description || 'No description'}</p>
             </div>
             {form.price && (
-              <span className="text-sm font-black text-orange-500 shrink-0">Rs {form.price}</span>
+              <span className="text-sm font-black text-olive-strong shrink-0">Rs {form.price}</span>
             )}
           </div>
         )}
@@ -223,7 +213,7 @@ export default function AddMenuItemForm() {
           className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all duration-150 active:scale-[0.98] shadow-sm
             ${success
               ? 'bg-green-500 text-white shadow-green-200'
-              : 'bg-orange-500 hover:bg-orange-600 text-white shadow-orange-200'
+              : 'bg-olive-strong hover:bg-olive-dark text-white'
             }`}
         >
           {success ? (

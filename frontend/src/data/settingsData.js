@@ -2,11 +2,12 @@
 
 export const defaultSettings = {
   restaurant: {
-    name: 'Wow Pizza Hub',
+    name: 'Whisker & Brew',
     phone: '+977-01-4500123',
-    address: 'Thamel, Kathmandu, Nepal 44600',
-    email: 'info@wowpizzahub.com',
+    address: 'Jhamsikhel, Lalitpur, Nepal',
+    email: 'hello@whiskerandbrew.example',
     taxRate: 13,
+    serviceChargeRate: 10,
     currency: 'NPR',
     timezone: 'Asia/Kathmandu',
   },
@@ -18,17 +19,17 @@ export const defaultSettings = {
     paperSize: '80mm',
   },
   counter: {
-    staffName: 'Raj Kumar Thapa',
-    shift: 'Evening',
+    staffName: 'Counter staff',
+    shift: 'Day',
     counterNumber: 1,
-    shiftStart: '04:00 PM',
-    shiftEnd: '11:00 PM',
+    shiftStart: '09:00 AM',
+    shiftEnd: '05:00 PM',
   },
   receipt: {
-    thankYouMessage: 'Thank you for choosing Wow Pizza Hub! Come again soon 🍕',
-    website: 'www.wowpizzahub.com',
-    footerNote: 'All prices include applicable taxes.',
-    showLogo: true,
+    thankYouMessage: 'Thank you for visiting Whisker & Brew. The cats hope to see you again.',
+    website: '',
+    footerNote: 'Totals include 10% service charge and 13% VAT.',
+    showLogo: false,
     showQrCode: false,
   },
 };

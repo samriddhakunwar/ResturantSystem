@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { usePOS } from '../context/PosContext';
 
 export default function Dashboard() {
-  const { apiOnline, orders, salesData, expensesData } = usePOS();
+  const { apiOnline, orders, salesData, expensesData, settings } = usePOS();
 
   // Live sales/expenses series from the backend when available, else mock.
   const salesSeries = apiOnline && salesData ? salesData : salesChartData;
@@ -31,7 +31,7 @@ export default function Dashboard() {
     const list = Object.values(agg)
       .sort((a, b) => b.sold - a.sold)
       .slice(0, 5)
-      .map((x) => ({ name: x.name, sold: x.sold, revenue: `Rs ${x.revenue.toFixed(0)}`, img: '🍽️' }));
+      .map((x) => ({ name: x.name, sold: x.sold, revenue: `Rs ${x.revenue.toFixed(0)}` }));
     return list.length ? list : topItems;
   })();
 
@@ -58,10 +58,10 @@ export default function Dashboard() {
     <div>
       <PageHeader
         title="Dashboard"
-        subtitle="Welcome back! Here's what's happening at Wow Pizza Hub today."
+        subtitle={`Here's what's happening at ${settings.restaurant.name} today.`}
         action={
-          <span className="text-xs bg-orange-50 text-orange-600 font-semibold px-3 py-1.5 rounded-full border border-orange-100">
-            📅 Monday, 9 Jun 2026
+          <span className="text-xs bg-olive-soft text-olive-strong font-semibold px-3 py-1.5 rounded-full border border-olive">
+            {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}
           </span>
         }
       />
@@ -100,7 +100,7 @@ export default function Dashboard() {
             </div>
             <Link
               to="/orders"
-              className="text-xs text-orange-500 font-semibold hover:text-orange-600 flex items-center gap-1 transition-colors"
+              className="text-xs text-olive-strong font-semibold hover:text-olive-dark flex items-center gap-1 transition-colors"
             >
               View all <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -120,7 +120,7 @@ export default function Dashboard() {
               <tbody className="divide-y divide-gray-50">
                 {recent.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50/70 transition-colors">
-                    <td className="px-5 py-3 text-sm font-semibold text-orange-500">{order.id}</td>
+                    <td className="px-5 py-3 text-sm font-semibold text-olive-strong">{order.id}</td>
                     <td className="px-3 py-3 text-sm text-gray-800">{order.customer}</td>
                     <td className="px-3 py-3 text-xs text-gray-500">{order.table}</td>
                     <td className="px-3 py-3">
@@ -142,13 +142,13 @@ export default function Dashboard() {
           <div className="space-y-3">
             {topSelling.map((item, i) => (
               <div key={item.name} className="flex items-center gap-3">
-                <span className="text-2xl">{item.img}</span>
+                <span className="w-6 text-sm font-bold text-olive-strong tabular-nums">{i + 1}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-800 truncate">{item.name}</p>
                   <div className="flex items-center gap-2 mt-0.5">
                     <div className="flex-1 bg-gray-100 rounded-full h-1.5">
                       <div
-                        className="bg-orange-400 h-1.5 rounded-full transition-all"
+                        className="bg-olive h-1.5 rounded-full transition-all"
                         style={{ width: `${100 - i * 16}%` }}
                       />
                     </div>

@@ -5,6 +5,7 @@ import { usePOS } from '../context/PosContext';
 import PosMenuCard from '../components/pos/PosMenuCard';
 import PosCategoryFilter from '../components/pos/PosCategoryFilter';
 import PosOrderPanel from '../components/pos/PosOrderPanel';
+import CatSilhouette from '../components/decor/CatSilhouette';
 
 export default function NewOrder() {
   const {
@@ -73,7 +74,7 @@ export default function NewOrder() {
                 placeholder="Search for items…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-9 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all placeholder:text-gray-400"
+                className="w-full pl-9 pr-9 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
               />
               {searchQuery && (
                 <button
@@ -89,12 +90,12 @@ export default function NewOrder() {
           {/* Mobile cart toggle */}
           <button
             onClick={() => setCartDrawerOpen(true)}
-            className="relative xl:hidden ml-auto flex items-center gap-2 px-3 py-2 bg-orange-500 text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-orange-600 transition-colors active:scale-95"
+            className="relative xl:hidden ml-auto flex items-center gap-2 px-3 py-2 bg-olive-strong text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-olive-dark transition-colors active:scale-95"
           >
             <ShoppingCart size={16} />
             Cart
             {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white text-orange-500 border-2 border-orange-500 rounded-full text-[10px] font-black flex items-center justify-center">
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white text-olive-strong border-2 border-olive-strong rounded-full text-[10px] font-black flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -111,7 +112,7 @@ export default function NewOrder() {
                 placeholder="Customer name or phone…"
                 value={cartCustomer}
                 onChange={(e) => setCartCustomer(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all placeholder:text-gray-400"
+                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
               />
             </div>
             <div className="relative">
@@ -121,7 +122,7 @@ export default function NewOrder() {
                 placeholder="Table number…"
                 value={cartTable}
                 onChange={(e) => setCartTable(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all placeholder:text-gray-400"
+                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
               />
             </div>
             <div className="relative">
@@ -131,7 +132,7 @@ export default function NewOrder() {
                 placeholder="Kitchen notes (optional)…"
                 value={cartNotes}
                 onChange={(e) => setCartNotes(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all placeholder:text-gray-400"
+                className="w-full pl-8 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
               />
             </div>
           </div>
@@ -151,12 +152,12 @@ export default function NewOrder() {
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {filteredItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-center">
-              <span className="text-5xl mb-3">🔍</span>
+              <CatSilhouette pose="stretching" className="mb-3 h-14 w-auto" />
               <p className="text-sm font-semibold text-gray-600">No items found</p>
               <p className="text-xs text-gray-400 mt-1">Try a different search or category</p>
               <button
                 onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
-                className="mt-3 text-xs text-orange-500 font-semibold hover:underline"
+                className="mt-3 text-xs text-olive-strong font-semibold hover:underline"
               >
                 Clear filters
               </button>
@@ -197,7 +198,7 @@ export default function NewOrder() {
           <div className="absolute right-0 top-0 bottom-0 w-80 sm:w-96 bg-white shadow-2xl flex flex-col animate-[slideInRight_0.25s_ease]">
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <span className="font-bold text-gray-900 flex items-center gap-2">
-                <ShoppingCart size={16} className="text-orange-500" />
+                <ShoppingCart size={16} className="text-olive-strong" />
                 Order Cart
               </span>
               <button

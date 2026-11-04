@@ -51,7 +51,7 @@ export default function Billing() {
                 <p className="text-xs font-medium">{label}</p>
               </div>
             ))}
-            <div className="flex-1 rounded-xl px-3 py-2 text-center bg-orange-50 text-orange-600">
+            <div className="flex-1 rounded-xl px-3 py-2 text-center bg-olive-soft text-olive-strong">
               <p className="text-xl font-bold">{billingOrders.length}</p>
               <p className="text-xs font-medium">Total</p>
             </div>
@@ -66,14 +66,14 @@ export default function Billing() {
                 className={`
                   w-full text-left p-4 rounded-2xl border transition-all duration-150
                   ${selectedId === inv.id
-                    ? 'border-orange-400 bg-orange-50 shadow-sm'
-                    : 'border-gray-100 bg-white hover:border-orange-200 hover:bg-orange-50/50 shadow-sm'
+                    ? 'border-olive bg-olive-soft shadow-sm'
+                    : 'border-gray-100 bg-white hover:border-olive-strong hover:bg-olive-soft shadow-sm'
                   }
                 `}
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <div>
-                    <p className="text-sm font-bold text-orange-500">{inv.id}</p>
+                    <p className="text-sm font-bold text-olive-strong">{inv.id}</p>
                     <p className="text-sm font-semibold text-gray-900">{inv.customer}</p>
                   </div>
                   <StatusBadge status={inv.paymentStatus} />
@@ -91,7 +91,7 @@ export default function Billing() {
             ))}
             {filtered.length === 0 && (
               <div className="text-center py-10 text-gray-400">
-                <p>🔍 No results found</p>
+                <p>No results found</p>
               </div>
             )}
           </div>

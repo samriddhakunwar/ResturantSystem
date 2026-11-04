@@ -12,8 +12,8 @@ export default function SearchBar({ placeholder = 'Search…', value, onChange, 
         placeholder={placeholder}
         className="
           w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200
-          rounded-xl outline-none focus:ring-2 focus:ring-orange-400/50
-          focus:border-orange-400 transition-all duration-200
+          rounded-xl outline-none focus:ring-2 focus:ring-olive-soft
+          focus:border-olive-strong transition-all duration-200
           placeholder:text-gray-400
         "
       />

@@ -3,6 +3,7 @@ import PageHeader from '../components/ui/PageHeader';
 import { usePOS } from '../context/PosContext';
 import StatusBadge from '../components/ui/StatusBadge';
 import { Clock } from 'lucide-react';
+import CatSilhouette from '../components/decor/CatSilhouette';
 
 export default function Kitchen() {
   const { orders } = usePOS();
@@ -36,7 +37,7 @@ export default function Kitchen() {
         {kitchenOrders.map((order) => (
           <div key={order.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
             <div className="flex items-center justify-between mb-3">
-              <p className="font-bold text-orange-500">{order.id}</p>
+              <p className="font-bold text-olive-strong">{order.id}</p>
               <StatusBadge status={order.status} />
             </div>
             <p className="font-semibold text-gray-900 mb-1">{order.customer}</p>
@@ -57,7 +58,7 @@ export default function Kitchen() {
         ))}
         {kitchenOrders.length === 0 && (
           <div className="col-span-3 text-center py-20 text-gray-400">
-            <span className="text-5xl">✅</span>
+            <CatSilhouette pose="lying" className="mx-auto h-14 w-auto" />
             <p className="mt-3 font-semibold">All caught up! No active kitchen orders.</p>
           </div>
         )}

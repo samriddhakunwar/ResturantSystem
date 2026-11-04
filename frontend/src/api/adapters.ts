@@ -22,9 +22,10 @@ export interface MenuVM {
   price: number;
   available: boolean;
   image: string | null;
-  emoji: string;
-  badge: string | null;
-  badgeColor: string | null;
+  dietaryTags: string[];
+  isFeatured: boolean;
+  recommendedById: number | null;
+  recommendedBy: string | null;
 }
 
 export interface OrderItemVM {
@@ -38,7 +39,9 @@ export interface OrderVM {
   backendId: number;
   customer: string;
   table: string;
-  status: 'Pending' | 'Preparing' | 'Completed' | 'Cancelled';
+  status: 'Pending' | 'Preparing' | 'Ready' | 'Served' | 'Completed' | 'Cancelled';
+  source: 'pos' | 'qr';
+  confirmed: boolean;
   paymentStatus: 'Paid' | 'Unpaid';
   paymentMethod: string | null;
   amount: number;
@@ -68,15 +71,17 @@ export interface InvoiceVM {
 const BE_TO_FE_STATUS: Record<ApiOrderStatus, OrderVM['status']> = {
   pending: 'Pending',
   preparing: 'Preparing',
+  ready: 'Ready',
+  served: 'Served',
   completed: 'Completed',
   cancelled: 'Cancelled',
 };
 
-// Backend has no "Ready" state — the FE board collapses it onto "preparing".
 const FE_TO_BE_STATUS: Record<string, ApiOrderStatus> = {
   Pending: 'pending',
   Preparing: 'preparing',
-  Ready: 'preparing',
+  Ready: 'ready',
+  Served: 'served',
   Completed: 'completed',
   Cancelled: 'cancelled',
 };
@@ -127,9 +132,10 @@ export function toMenuVM(item: ApiMenuItem): MenuVM {
     price: num(item.price),
     available: item.is_available,
     image: item.image,
-    emoji: '🍽️',
-    badge: null,
-    badgeColor: null,
+    dietaryTags: item.dietary_tags ?? [],
+    isFeatured: item.is_featured ?? false,
+    recommendedById: item.recommended_by ?? null,
+    recommendedBy: item.recommended_by_name ?? null,
   };
 }
 
@@ -142,6 +148,8 @@ export function toOrderVM(order: ApiOrder): OrderVM {
     customer: customer || 'Walk-in Customer',
     table: tableLabel(order.table_number),
     status: BE_TO_FE_STATUS[order.status] ?? 'Pending',
+    source: order.source ?? 'pos',
+    confirmed: order.confirmed_at != null,
     paymentStatus: 'Unpaid', // resolved against bills where available
     paymentMethod: null,
     amount: num(order.total),

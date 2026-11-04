@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Trash2, GripVertical, Edit3, Check, X } from 'lucide-react';
 import { usePOS } from '../../context/PosContext';
+import ItemThumb from '../ui/ItemThumb';
 
 export default function MenuItemRow({ item }) {
   const { updateMenuItemPrice, toggleMenuItemAvailability, deleteMenuItem, updateMenuItem } = usePOS();
@@ -49,7 +50,7 @@ export default function MenuItemRow({ item }) {
       className={`
         group flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-150
         ${item.available
-          ? 'bg-white border-gray-100 hover:border-orange-200 hover:shadow-sm'
+          ? 'bg-white border-gray-100 hover:border-olive-strong hover:shadow-sm'
           : 'bg-gray-50/60 border-gray-100 opacity-70 hover:opacity-90'
         }
       `}
@@ -57,18 +58,8 @@ export default function MenuItemRow({ item }) {
       {/* Drag handle */}
       <GripVertical className="w-4 h-4 text-gray-300 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab" />
 
-      {/* Food image / emoji */}
-      <div className="w-11 h-11 rounded-xl overflow-hidden bg-gray-100 shrink-0">
-        <img
-          src={item.image}
-          alt={item.name}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.parentElement.innerHTML = `<span class="w-full h-full flex items-center justify-center text-2xl">${item.emoji}</span>`;
-          }}
-        />
-      </div>
+      {/* Photo or category doodle */}
+      <ItemThumb item={item} />
 
       {/* Name + description */}
       <div className="flex-1 min-w-0">
@@ -81,7 +72,7 @@ export default function MenuItemRow({ item }) {
               onChange={(e) => setNameVal(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') commitName(); if (e.key === 'Escape') { setNameVal(item.name); setEditingName(false); } }}
               onBlur={commitName}
-              className="flex-1 text-sm font-semibold text-gray-900 bg-orange-50 border border-orange-300 rounded-lg px-2 py-0.5 outline-none focus:ring-2 focus:ring-orange-200"
+              className="flex-1 text-sm font-semibold text-gray-900 bg-olive-soft border border-olive rounded-lg px-2 py-0.5 outline-none focus:ring-2 focus:ring-olive-soft"
             />
           </div>
         ) : (
@@ -116,16 +107,16 @@ export default function MenuItemRow({ item }) {
               onChange={(e) => setPriceVal(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') commitPrice(); if (e.key === 'Escape') { setPriceVal(String(item.price)); setEditingPrice(false); } }}
               onBlur={commitPrice}
-              className="w-20 text-sm font-bold text-center text-orange-600 bg-orange-50 border border-orange-300 rounded-lg px-2 py-1 outline-none focus:ring-2 focus:ring-orange-200"
+              className="w-20 text-sm font-bold text-center text-olive-strong bg-olive-soft border border-olive rounded-lg px-2 py-1 outline-none focus:ring-2 focus:ring-olive-soft"
             />
           </div>
         ) : (
           <button
             onClick={() => setEditingPrice(true)}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-orange-50 group/price transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-olive-soft group/price transition-colors"
             title="Click to edit price"
           >
-            <span className="text-sm font-bold text-orange-500">Rs {item.price}</span>
+            <span className="text-sm font-bold text-olive-strong">Rs {item.price}</span>
             <Edit3 className="w-3 h-3 text-gray-300 opacity-0 group-hover/price:opacity-100 transition-opacity" />
           </button>
         )}
@@ -138,8 +129,8 @@ export default function MenuItemRow({ item }) {
         title={item.available ? 'Mark unavailable' : 'Mark available'}
         className={`
           relative inline-flex h-6 w-11 items-center rounded-full shrink-0
-          transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1
-          ${item.available ? 'bg-orange-500' : 'bg-gray-200'}
+          transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-olive-soft focus:ring-offset-1
+          ${item.available ? 'bg-olive-strong' : 'bg-gray-200'}
         `}
       >
         <span

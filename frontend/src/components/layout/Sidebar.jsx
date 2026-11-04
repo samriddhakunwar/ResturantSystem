@@ -42,12 +42,9 @@ export default function Sidebar() {
         {/* Logo */}
         <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-orange-500 rounded-xl flex items-center justify-center text-lg shadow-sm">
-              🍕
-            </div>
             <div>
-              <p className="font-bold text-gray-900 text-sm leading-tight">Wow Pizza Hub</p>
-              <p className="text-xs text-gray-400 font-medium">POS System</p>
+              <p className="font-display font-extrabold text-charcoal text-base leading-tight">Whisker &amp; Brew</p>
+              <p className="text-xs text-muted font-medium">Staff</p>
             </div>
           </div>
           <button
@@ -69,14 +66,14 @@ export default function Sidebar() {
                 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                 transition-all duration-150 group
                 ${isActive
-                  ? 'bg-orange-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:bg-orange-50 hover:text-orange-600'
+                  ? 'bg-olive-strong text-white shadow-sm'
+                  : 'text-gray-600 hover:bg-olive-soft hover:text-olive-dark'
                 }
               `}
             >
               {({ isActive }) => (
                 <>
-                  <Icon className={`w-4.5 h-4.5 shrink-0 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-orange-500'}`} size={18} />
+                  <Icon className={`w-4.5 h-4.5 shrink-0 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-olive-dark'}`} size={18} />
                   {label}
                 </>
               )}

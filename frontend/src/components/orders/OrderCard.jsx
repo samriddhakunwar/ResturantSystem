@@ -13,7 +13,7 @@ export default function OrderCard({ order }) {
     setPrinting(true);
     const res = await printKitchenTicket(order.backendId);
     setPrinting(false);
-    if (!res.ok) alert(`🖨️ ${res.message}`);
+    if (!res.ok) alert(res.message);
   };
 
   // Mirrors the backend transitions: pending → preparing → completed.
@@ -30,7 +30,7 @@ export default function OrderCard({ order }) {
       <div className="px-4 pt-4 pb-3 border-b border-gray-50">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-sm font-bold text-orange-500">{order.id}</p>
+            <p className="text-sm font-bold text-olive-strong">{order.id}</p>
             <p className="text-base font-semibold text-gray-900 mt-0.5">{order.customer}</p>
           </div>
           <StatusBadge status={order.status} />
@@ -73,30 +73,30 @@ export default function OrderCard({ order }) {
           {nextStatus && (
             <Button
               size="sm"
-              variant={nextStatus === 'Completed' ? 'success' : 'primary'}
-              icon={nextStatus === 'Completed' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <ChefHat className="w-3.5 h-3.5" />}
+              variant="primary"
               onClick={() => updateOrderStatus(order.id, nextStatus)}
               className="flex-1"
             >
+              {nextStatus === 'Completed' ? <CheckCircle2 size={16} aria-hidden="true" /> : <ChefHat size={16} aria-hidden="true" />}
               {nextStatus === 'Preparing' ? 'Start' : 'Complete'}
             </Button>
           )}
           <Button
             size="sm"
-            variant="secondary"
-            icon={<Printer className="w-3.5 h-3.5" />}
+            variant="outline"
             onClick={handlePrint}
             disabled={printing}
           >
+            <Printer size={16} aria-hidden="true" />
             {printing ? 'Printing…' : 'Print KOT'}
           </Button>
           {order.status !== 'Completed' && order.status !== 'Cancelled' && (
             <Button
               size="sm"
-              variant="danger"
-              icon={<XCircle className="w-3.5 h-3.5" />}
+              variant="outline"
               onClick={() => updateOrderStatus(order.id, 'Cancelled')}
             >
+              <XCircle size={16} aria-hidden="true" />
               Cancel
             </Button>
           )}

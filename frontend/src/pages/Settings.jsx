@@ -21,8 +21,8 @@ function Field({ label, value, onChange, type = 'text', suffix }) {
           onChange={(e) => onChange(e.target.value)}
           className="
             w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200
-            rounded-xl outline-none focus:ring-2 focus:ring-orange-400/40
-            focus:border-orange-400 transition-all duration-200 text-gray-800
+            rounded-xl outline-none focus:ring-2 focus:ring-olive-soft
+            focus:border-olive-strong transition-all duration-200 text-gray-800
           "
         />
         {suffix && (
@@ -40,8 +40,8 @@ function SettingsCard({ icon: Icon, title, children }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-gray-50/50">
-        <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-          <Icon className="w-4 h-4 text-orange-500" />
+        <div className="w-8 h-8 bg-olive-soft rounded-lg flex items-center justify-center">
+          <Icon className="w-4 h-4 text-olive-strong" />
         </div>
         <h3 className="text-sm font-bold text-gray-800">{title}</h3>
       </div>
@@ -76,12 +76,9 @@ export default function Settings() {
         title="Settings"
         subtitle="Configure your POS system preferences"
         action={
-          <Button
-            onClick={handleSave}
-            icon={saved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-            variant={saved ? 'success' : 'primary'}
-          >
-            {saved ? 'Saved!' : 'Save Changes'}
+          <Button onClick={handleSave}>
+            {saved ? <CheckCircle2 size={18} aria-hidden="true" /> : <Save size={18} aria-hidden="true" />}
+            {saved ? 'Saved' : 'Save changes'}
           </Button>
         }
       />
@@ -178,7 +175,7 @@ export default function Settings() {
                 <select
                   value={counter.shift}
                   onChange={(e) => setCounter((s) => ({ ...s, shift: e.target.value }))}
-                  className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-400/40 focus:border-orange-400 transition-all text-gray-800"
+                  className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-olive-soft focus:border-olive-strong transition-all text-gray-800"
                 >
                   {['Morning', 'Afternoon', 'Evening', 'Night'].map((s) => (
                     <option key={s}>{s}</option>
@@ -216,7 +213,7 @@ export default function Settings() {
                 value={receipt.thankYouMessage}
                 onChange={(e) => setReceipt((s) => ({ ...s, thankYouMessage: e.target.value }))}
                 rows={3}
-                className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-400/40 focus:border-orange-400 transition-all resize-none text-gray-800"
+                className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-olive-soft focus:border-olive-strong transition-all resize-none text-gray-800"
               />
             </div>
             <Field
@@ -253,13 +250,9 @@ export default function Settings() {
 
       {/* Bottom save bar */}
       <div className="mt-6 flex justify-end">
-        <Button
-          onClick={handleSave}
-          size="lg"
-          icon={saved ? <CheckCircle2 className="w-5 h-5" /> : <Save className="w-5 h-5" />}
-          variant={saved ? 'success' : 'primary'}
-        >
-          {saved ? 'All Changes Saved!' : 'Save All Settings'}
+        <Button onClick={handleSave}>
+          {saved ? <CheckCircle2 size={18} aria-hidden="true" /> : <Save size={18} aria-hidden="true" />}
+          {saved ? 'All changes saved' : 'Save all settings'}
         </Button>
       </div>
     </div>

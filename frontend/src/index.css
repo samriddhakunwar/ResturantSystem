@@ -1,85 +1,63 @@
+/* Whisker & Brew — app-level styles. Tokens and wb- components live in
+   ./ui-kit/whisker.css, which main.tsx imports first (its font @import must
+   stay at the top of the bundle). */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: light;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
-  line-height: 1.5;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, rgba(255, 90, 31, 0.12), transparent 28%),
-    radial-gradient(circle at 20% 20%, rgba(15, 23, 42, 0.04), transparent 20%),
-    #f8fafc;
-  transition: background-color 300ms ease, background 300ms ease;
-}
-
-html.dark body {
-  background: radial-gradient(circle at top, rgba(255, 90, 31, 0.08), transparent 28%),
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.02), transparent 20%),
-    #0f172a;
+  background: var(--cream);
+  color: var(--charcoal);
+  font-family: var(--font-body);
+  line-height: 1.5;
 }
 
 #root {
   min-height: 100vh;
 }
 
-* {
-  box-sizing: border-box;
+/* Kit focus ring for every control, not just wb- classes:
+   2px cream gap, then 2px charcoal. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--cream), 0 0 0 4px var(--focus);
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
+/* Inputs stay at 16px so iOS doesn't zoom. */
+input, select, textarea {
+  font-size: max(16px, 1em);
 }
 
-::selection {
-  background: rgba(255, 90, 31, 0.24);
+/* The kit's disabled state applies to every control, steppers included. */
+.wb-qty button:disabled {
+  background: var(--disabled);
+  color: var(--disabled-ink);
+  cursor: not-allowed;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* The kit's is-error only recolours <input>; textareas need it too. */
+.wb-field.is-error textarea {
+  border-color: var(--danger);
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.36);
-  border-radius: 9999px;
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Smooth color transitions for dark mode */
-@layer components {
-  .transition {
-    @apply duration-300 ease-in-out;
-  }
-}
-
-/* ── Animations ──────────────────────────────────────────────────────────── */
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0);   }
-}
-
-/* ── Utility: hide scrollbar but keep scroll ─────────────────────────────── */
+/* Hide a scrollbar but keep the element scrollable. */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,4 +1,5 @@
 // ─── App Routes ───────────────────────────────────────────────────────────────
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import Dashboard from '../pages/Dashboard';
@@ -10,6 +11,8 @@ import Kitchen from '../pages/Kitchen';
 import Settings from '../pages/Settings';
 import NotFound from '../pages/NotFound';
 
+// Dev-only component gallery; the import is dropped from production builds.
+const Styleguide = import.meta.env.DEV ? lazy(() => import('../pages/Styleguide')) : null;
 
 export default function AppRoutes() {
   return (
@@ -23,6 +26,9 @@ export default function AppRoutes() {
         <Route path="kitchen"   element={<Kitchen />}    />
         <Route path="settings"  element={<Settings />}   />
       </Route>
+      {Styleguide && (
+        <Route path="styleguide" element={<Suspense fallback={null}><Styleguide /></Suspense>} />
+      )}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

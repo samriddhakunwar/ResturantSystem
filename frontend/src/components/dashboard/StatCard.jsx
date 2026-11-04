@@ -8,7 +8,7 @@ const iconMap = {
   DollarSign, ShoppingBag, Clock, TrendingUp,
 };
 
-export default function StatCard({ title, value, growth, trend, bg, iconColor, icon }) {
+export default function StatCard({ title, value, growth, trend, bg = 'bg-olive-soft', iconColor = 'text-olive-strong', icon }) {
   const Icon = iconMap[icon] ?? DollarSign;
   const isUp = trend === 'up';
 

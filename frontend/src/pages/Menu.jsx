@@ -2,9 +2,9 @@
 import { useState, useMemo } from 'react';
 import { Search, X, LayoutGrid, List, Package, TrendingUp, Eye, EyeOff } from 'lucide-react';
 import { usePOS } from '../context/PosContext';
-import { CATEGORY_META } from '../data/menuManagementData';
 import MenuCategoryCard from '../components/menu/MenuCategoryCard';
 import AddMenuItemForm from '../components/menu/AddMenuItemForm';
+import CatSilhouette from '../components/decor/CatSilhouette';
 
 const FILTER_TABS = [
   { id: 'all',       label: 'All Items' },
@@ -69,8 +69,8 @@ export default function Menu() {
           onClick={() => setShowAddPanel((v) => !v)}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all border active:scale-95
             ${showAddPanel
-              ? 'bg-orange-500 text-white border-orange-500 shadow-sm shadow-orange-200'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'
+              ? 'bg-olive-strong text-white border-olive-strong shadow-sm'
+              : 'bg-white text-gray-600 border-gray-200 hover:border-olive-strong hover:text-olive-dark'
             }`}
         >
           <Package size={15} />
@@ -83,7 +83,7 @@ export default function Menu() {
         {[
           { label: 'Total Items',    value: totalItems,    icon: Package,   color: 'text-gray-900',   bg: 'bg-gray-100' },
           { label: 'Active Items',   value: activeItems,   icon: Eye,       color: 'text-green-600',  bg: 'bg-green-50' },
-          { label: 'Inactive Items', value: inactiveItems, icon: EyeOff,    color: 'text-orange-500', bg: 'bg-orange-50' },
+          { label: 'Inactive Items', value: inactiveItems, icon: EyeOff,    color: 'text-olive-strong', bg: 'bg-olive-soft' },
         ].map(({ label, value, icon: Icon, color, bg }) => (
           <div key={label} className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-3 flex items-center gap-3">
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${bg} shrink-0`}>
@@ -114,7 +114,7 @@ export default function Menu() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-9 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none
-                  focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all placeholder:text-gray-400"
+                  focus:border-olive-strong focus:bg-white focus:ring-2 focus:ring-olive-soft transition-all placeholder:text-gray-400"
               />
               {searchQuery && (
                 <button
@@ -129,7 +129,6 @@ export default function Menu() {
             {/* Category filter */}
             <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
               {['All', ...allCategories].map((cat) => {
-                const meta = CATEGORY_META[cat];
                 const isActive = selectedCategory === cat;
                 return (
                   <button
@@ -137,11 +136,11 @@ export default function Menu() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all border shrink-0
                       ${isActive
-                        ? 'bg-orange-500 text-white border-orange-500'
-                        : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-orange-200 hover:text-orange-600'
+                        ? 'bg-olive-strong text-white border-olive-strong'
+                        : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-olive-strong hover:text-olive-dark'
                       }`}
                   >
-                    {meta?.emoji || '🍽️'} {cat}
+                    {cat}
                   </button>
                 );
               })}
@@ -173,7 +172,7 @@ export default function Menu() {
             {(searchQuery || selectedCategory !== 'All' || activeFilter !== 'all') && (
               <button
                 onClick={() => { setSearchQuery(''); setSelectedCategory('All'); setActiveFilter('all'); }}
-                className="text-xs text-orange-500 font-semibold hover:text-orange-600 flex items-center gap-1"
+                className="text-xs text-olive-strong font-semibold hover:text-olive-dark flex items-center gap-1"
               >
                 <X size={12} /> Clear filters
               </button>
@@ -183,7 +182,7 @@ export default function Menu() {
           {/* Category cards */}
           {totalFiltered === 0 ? (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-16 text-center">
-              <span className="text-5xl mb-4">🔍</span>
+              <CatSilhouette pose="stretching" className="mb-4 h-16 w-auto" />
               <p className="text-base font-bold text-gray-700 mb-1">No items found</p>
               <p className="text-sm text-gray-400">Try a different search or filter</p>
             </div>
