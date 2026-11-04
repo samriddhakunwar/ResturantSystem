@@ -5,7 +5,7 @@ import babel from '@rolldown/plugin-babel'
 // The backend Django dev server. The proxy below lets phones on the café
 // Wi-Fi reach the API through the same origin as the page (no CORS, and no
 // second LAN address to configure): set VITE_API_URL=/api/v1.
-const BACKEND = process.env.VITE_BACKEND_URL ?? 'http://localhost:8000'
+const BACKEND = process.env.VITE_BACKEND_URL ?? 'http://127.0.0.1:8000'
 
 // https://vite.dev/config/
 export default defineConfig({

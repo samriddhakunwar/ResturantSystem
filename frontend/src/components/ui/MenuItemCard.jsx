@@ -48,7 +48,7 @@ export default function MenuItemCard({
           <span className="wb-price">{formatRs(price)}</span>
           {soldOut ? (
             <span className="wb-soldout">Napping · sold out</span>
-          ) : (
+          ) : onAdd && (
             <button
               type="button"
               className="wb-btn wb-btn--primary wb-add"

@@ -47,7 +47,7 @@ export default function Orders() {
         title="Active Orders"
         subtitle={`${orders.filter((o) => o.status !== 'Completed').length} orders in progress`}
         action={
-          <Button to="/new-order">
+          <Button to="/staff/new-order">
             <PlusCircle size={18} aria-hidden="true" />
             New order
           </Button>

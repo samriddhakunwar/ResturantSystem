@@ -5,7 +5,7 @@ import Navbar from '../components/layout/Navbar';
 
 export default function MainLayout() {
   const { pathname } = useLocation();
-  const isFullBleed = pathname === '/new-order'; // POS page gets no padding
+  const isFullBleed = pathname === '/staff/new-order'; // POS page gets no padding
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">

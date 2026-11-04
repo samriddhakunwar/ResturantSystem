@@ -1,14 +1,14 @@
 // ─── App Entry Point ──────────────────────────────────────────────────────────
 import { BrowserRouter } from 'react-router-dom';
-import { PosProvider } from './context/PosContext';
+import { CafeConfigProvider } from './context/CafeConfigContext';
 import AppRoutes from './routes/AppRoutes';
 
 export default function App() {
   return (
     <BrowserRouter>
-      <PosProvider>
+      <CafeConfigProvider>
         <AppRoutes />
-      </PosProvider>
+      </CafeConfigProvider>
     </BrowserRouter>
   );
 }

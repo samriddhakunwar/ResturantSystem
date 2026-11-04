@@ -99,7 +99,7 @@ export default function Dashboard() {
               <p className="text-xs text-gray-500 mt-0.5">Latest transactions today</p>
             </div>
             <Link
-              to="/orders"
+              to="/staff/orders"
               className="text-xs text-olive-strong font-semibold hover:text-olive-dark flex items-center gap-1 transition-colors"
             >
               View all <ArrowRight className="w-3.5 h-3.5" />

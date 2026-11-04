@@ -7,12 +7,12 @@ import {
 import { usePOS } from '../../context/PosContext';
 
 const navItems = [
-  { to: '/',              label: 'Dashboard',   icon: LayoutDashboard },
-  { to: '/new-order',     label: 'New Order',   icon: PlusCircle      },
-  { to: '/orders',        label: 'Orders',      icon: ClipboardList   },
-  { to: '/billing',       label: 'Billing',     icon: Receipt         },
-  { to: '/menu',          label: 'Menu',        icon: UtensilsCrossed },
-  { to: '/settings',      label: 'Settings',    icon: Settings        },
+  { to: '/staff',            label: 'Dashboard',   icon: LayoutDashboard },
+  { to: '/staff/new-order',    label: 'New Order',   icon: PlusCircle      },
+  { to: '/staff/orders',    label: 'Orders',      icon: ClipboardList   },
+  { to: '/staff/billing',    label: 'Billing',     icon: Receipt         },
+  { to: '/staff/menu',    label: 'Menu',        icon: UtensilsCrossed },
+  { to: '/staff/settings',    label: 'Settings',    icon: Settings        },
 ];
 
 export default function Sidebar() {
@@ -61,7 +61,7 @@ export default function Sidebar() {
             <NavLink
               key={to}
               to={to}
-              end={to === '/'}
+              end={to === '/staff'}
               className={({ isActive }) => `
                 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                 transition-all duration-150 group
